@@ -20,11 +20,12 @@ clr = re.compile(r'\s+', re.UNICODE)
 
 def rpl(s):
     """
-    returns string in which letter 'ё' replaced with 'е'
-    this func is used in index module for replacing 'ё' in words after normalization
+    this func is used in index module for replacing 'ё' with 'е' in words after normalization
 
-    :param s: str
-    :return: str
+    :param s: unicode string
+    :type s: str
+    :return: unicode string in which letter 'ё' replaced with 'е'
+    :rtype: str
     """
     s = s.split()
     s = [i.replace(u'ё', u'е') if u'ё' in i else i for i in s]
@@ -34,13 +35,14 @@ def rpl(s):
 
 def clear_request(s):
     """
-    returns lowercased string without digits, punctuation and non-cyrillic letters
     ATTENTION:
-    -- '-' is saved in words like 'что-либо' etc)
+    -- '-' is saved in words like 'что-либо' etc
     -- 'ё' is replaced with 'e'
 
-    :param s: str
-    :return: str
+    :param s: unicode string
+    :type s: str
+    :return: lowercased unicode string without punctuation and other non-letter symbols
+    :rtype: str
     """
 
     s = s.lower()
@@ -55,13 +57,15 @@ def clear_request(s):
 def clear_poem(s):
     """
     THIS FUNC IS USED IN INDEX CREATION
-    returns lowercased string without digits, punctuation and non-cyrillic letters
+
     ATTENTION:
     -- '-' is saved in words like 'что-либо' etc)
     -- 'ё' is not replaced with 'e'
 
-    :param s: str
-    :return: str
+    :param s: unicode string
+    :type s: str
+    :return: lowercased unicode string without punctuation and other non-letter symbols
+    :rtype: str
     """
 
     s = s.lower()
@@ -75,12 +79,11 @@ def clear_poem(s):
 
 def get_normal(word):
     """
-    returns list of tuples containing normal form and part of speech
+    :param word: unicode string
+    :type word: str
+    :return: list of tuples containing normal form and part of speech
     f.i. [('стать', 'глагол'), ('сталь', 'существительное')]
-    if part of speech can not be defined than part of speech is None
-
-    :param word: str
-    :return: list
+    :rtype: list
     """
 
     pos_match = {
@@ -117,8 +120,6 @@ def get_normal(word):
 
 
 if __name__ == '__main__':
-    # print get_normal(u'стали')
-    c = {}
-    for item in get_normal(u'ель'):
+    for item in get_normal(u'стали'):
         print item[0], item[1]
     print clear_request(u'Кто-то где-то    и может - это или что-то  Ёж и ёлочка  куда-то')
