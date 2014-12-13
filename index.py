@@ -8,11 +8,12 @@ Functions:
 
 """
 
-__author__ = 'nyash myash'
-
 import codecs
 import json
 from text_utils import get_normal, clear_poem, rpl
+
+__author__ = 'nyash myash'
+
 
 def do_list(path = u'oster.txt'):
     """
@@ -87,8 +88,13 @@ def create_index():
 
 
 def get_poem(i):
-    """ returns poem by poem number """
+    """
 
+    :param i: poem number
+    :type i: int
+    :return: poem
+    :rtype: str
+    """
     global poems
     return poems[i]
 

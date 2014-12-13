@@ -8,11 +8,10 @@ Module contains basic functions for handling text
 
 """
 
-__author__ = 'nyash myash'
-
-
 import pymorphy2
 import re
+
+__author__ = 'nyash myash'
 
 
 delete = re.compile(u'[^а-яА-Я\-ёЁ0-9]+?', re.UNICODE)
