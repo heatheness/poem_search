@@ -4,7 +4,7 @@
 Module contains basic functions for handling text
 -- clear_request.  returns string without digits, punctuation and non-cyrillic letters, 'ё' is replaced with 'е'
 -- clear_poem. like clear_request, but 'ё' is not replaced with 'е'
--- normalizing words
+-- get_normal. returns normalized word
 """
 
 __author__ = 'nyash myash'
@@ -113,6 +113,6 @@ def get_normal(word):
 if __name__ == '__main__':
     # print get_normal(u'стали')
     c = {}
-    for item in get_normal(u'вперёд'):
+    for item in get_normal(u'из'):
         print item[0], item[1]
     print clear_request(u'Кто-то где-то    и может - это или что-то  Ёж и ёлочка  куда-то')
