@@ -6,3 +6,7 @@ All search logic is here.
 """
 
 __author__ = 'mayns'
+
+
+def process_request(req):
+    pass

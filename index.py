@@ -15,7 +15,7 @@ from text_utils import get_normal, clear_poem, rpl
 __author__ = 'nyash myash'
 
 
-def do_list(path = u'oster.txt'):
+def do_list(path=u'oster.txt'):
     """
     takes path to txt file with poems separated with '* * *'.
     returns list of poems

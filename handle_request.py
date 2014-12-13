@@ -21,7 +21,7 @@ def get_syns(words, lang=u'ru-ru'):
     """
     :type words: list
     :param words: list of tuples from get_normal func
-    rtype: list
+    :rtype: list
     """
     syns_variants = []
     for word in words:
