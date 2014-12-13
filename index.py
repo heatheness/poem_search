@@ -17,9 +17,10 @@ __author__ = 'nyash myash'
 
 def do_list(path = u'oster.txt'):
     """
-    takes path to txt file with poems separated with '* * *'.
-    returns list of poems
-
+    :param path: path to in txt file with poems separated  with '* * *'
+    :type str
+    :returns list of poems
+    :rtype list
     """
 
     f = codecs.open(path, encoding=u'utf-8')
@@ -40,12 +41,13 @@ def do_list(path = u'oster.txt'):
 
 
 def init_index():
+
     """
-    returns index (dict) like {normal_form : [(poem number, position in poem), (poem number, position in poem) ... ]}
     returns index from file if index.txt exists, otherwise creates index and index.txt with create_index func
 
+    :returns index like {normal_form : [(poem number, position in poem), (poem number, position in poem) ... ]}
+    :rtype dict
     """
-
     global poems
 
     try:
@@ -58,12 +60,14 @@ def init_index():
 
 
 def create_index():
-    """
-    returns new index (dict) like {normal_form : [(poem number, position in poem), (poem number, position in poem) ... ]}
-    creates index.txt or rewrites index.txt if exists
+
 
     """
+    returns index and creates index.txt or rewrites index.txt if exists
+    :return index ike {normal_form : [(poem number, position in poem), (poem number, position in poem) ... ]}
+    :rtype dict
 
+    """
     global poems
     cur_index = {}
 
@@ -89,19 +93,23 @@ def create_index():
 
 def get_poem(i):
     """
-
     :param i: poem number
     :type i: int
-    :return: poem
-    :rtype: str
+    :return poem
+    :rtype str
     """
+
     global poems
     return poems[i]
 
 
 def get_index_data(word):
-    """ returns index data by normalized word """
-
+    """
+    :param word: normalized word
+    :type word: str
+    :return index data
+    :rtype list
+    """
     global poems_index
     return poems_index[word]
 
