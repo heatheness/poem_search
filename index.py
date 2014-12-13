@@ -12,7 +12,7 @@ __author__ = 'nyash myash'
 
 import codecs
 import json
-from text_utils import get_normal, clear
+from text_utils import get_normal, clear_poem, rpl
 
 def do_list(path = u'oster.txt'):
     """
@@ -31,11 +31,12 @@ def do_list(path = u'oster.txt'):
             s+= line
         else:
             poems.append(s)
-            s = ''
+            s = u''
     else:
         if s:
             poems.append(s)
     return poems
+
 
 def init_index():
     """
@@ -52,13 +53,16 @@ def init_index():
             cur_index = json.loads(r)
             return cur_index
     except IOError:
-        create_index()
+        return create_index()
+
 
 def create_index():
     """
     returns new index (dict) like {normal_form : [(poem number, position in poem), (poem number, position in poem) ... ]}
     creates index.txt or rewrites index.txt if exists
+
     """
+
     global poems
     cur_index = {}
 
@@ -66,11 +70,13 @@ def create_index():
     for i in xrange(len(poems)):
         print 'creating index for poem ...', i
         position = 0
-        sen = clear(poems[i]).split()
+        sen = clear_poem(poems[i]).split()
         for word in sen:
             normal = get_normal(word)
-            for item in normal:
-                cur_index.setdefault(item[0], []).append((i, position))
+            forms = {i[0] for i in normal}
+            for item in forms:
+                location = (i, position)
+                cur_index.setdefault(rpl(item), []).append(location)
             position +=1
 
     storage_index = json.dumps(cur_index)
@@ -79,14 +85,17 @@ def create_index():
 
     return cur_index
 
+
 def get_poem(i):
     """ returns poem by poem number """
 
     global poems
     return poems[i]
 
+
 def get_index_data(word):
     """ returns index data by normalized word """
+
     global poems_index
     return poems_index[word]
 
