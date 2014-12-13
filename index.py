@@ -61,7 +61,7 @@ def create_index():
     """
     returns index and creates index.txt or rewrites index.txt if exists
 
-    :return index ike {normal_form : [(poem number, position in poem), (poem number, position in poem) ... ]}
+    :return index like {normal_form : [(poem number, position in poem), (poem number, position in poem) ... ]}
     :rtype: dict
     """
 
