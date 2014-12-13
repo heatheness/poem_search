@@ -21,7 +21,8 @@ def result_formatter(results):
     """
     if not results:
         return u'No results for your request'
-    return u'\n\n***\n\n'.join(results)
+    results = [u'\n- {} -\n{}\n'.format(res[0]+1, res[1]) for res in results]
+    return u''.join(results)
 
 while True:
     req = raw_input(prompt)
