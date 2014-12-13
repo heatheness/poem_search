@@ -43,9 +43,7 @@ def do_list(path=u'oster.txt'):
 def init_index():
 
     """
-    returns index from file if index.txt exists, otherwise creates index and index.txt with create_index func
-
-    :returns index like {normal_form : [(poem number, position in poem), (poem number, position in poem) ... ]}
+    :return index like {normal_form : [(poem number, position in poem), (poem number, position in poem) ... ]}
     :rtype: dict
     """
     global poems
