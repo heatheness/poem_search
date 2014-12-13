@@ -15,7 +15,7 @@ from text_utils import get_normal, clear_poem, rpl
 __author__ = 'nyash myash'
 
 
-def do_list(path=u'oster.txt'):
+def poems_to_list(path=u'oster.txt'):
     """
     :param path: path to in txt file with poems separated  with '* * *'
     :type path: str
@@ -111,7 +111,7 @@ def get_index_data(word):
     return poems_index[word]
 
 
-poems = do_list()
+poems = poems_to_list()
 poems_index = init_index()
 
 if __name__ == "__main__":
