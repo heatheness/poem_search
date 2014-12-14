@@ -10,7 +10,7 @@ Functions:
 
 import codecs
 import json
-from text_utils import get_normal, clear_poem, rpl
+from text_utils import get_normal, clear, yo_replace
 
 __author__ = 'nyash myash'
 
@@ -70,13 +70,13 @@ def create_index():
     for i in xrange(len(poems)):
         print 'creating index for poem ...', i
         position = 0
-        sen = clear_poem(poems[i]).split()
+        sen = clear(poems[i]).split()
         for word in sen:
             normal = get_normal(word)
             forms = {i[0] for i in normal}
             for item in forms:
                 location = (i, position)
-                cur_index.setdefault(rpl(item), []).append(location)
+                cur_index.setdefault(yo_replace(item), []).append(location)
             position +=1
 
     storage_index = json.dumps(cur_index)

@@ -3,7 +3,7 @@
 """
 Module contains basic functions for handling text
 -- clear_request
--- clear_poem
+-- clear
 -- get_normal
 
 """
@@ -18,7 +18,7 @@ delete = re.compile(u'[^а-яА-Я\-ёЁ0-9]+?', re.UNICODE)
 clr = re.compile(r'\s+', re.UNICODE)
 
 
-def rpl(s):
+def yo_replace(s):
     """
     this func is used in index module for replacing 'ё' with 'е' in words after normalization
 
@@ -27,39 +27,14 @@ def rpl(s):
     :return: unicode string in which letter 'ё' replaced with 'е'
     :rtype: str
     """
-    s = s.split()
-    s = [i.replace(u'ё', u'е') if u'ё' in i else i for i in s]
-    s = u' '.join(s)
+    s = s.replace(u'ё', u'е')
     return s
 
 
-def clear_request(s):
+def clear(s):
     """
     ATTENTION:
     -- '-' is saved in words like 'что-либо' etc
-    -- 'ё' is replaced with 'e'
-
-    :param s: unicode string
-    :type s: str
-    :return: lowercased unicode string without punctuation and other non-letter symbols
-    :rtype: str
-    """
-
-    s = s.lower()
-    s = delete.sub(' ', s)
-    s = clr.sub(u' ', s).strip()
-    s = s.split()
-    s = [i for i in s if i != u'-']
-    s = [i.replace(u'ё', u'е') if u'ё' in i else i for i in s]
-    s = u' '.join(s)
-    return s
-
-def clear_poem(s):
-    """
-    THIS FUNC IS USED IN INDEX CREATION
-
-    ATTENTION:
-    -- '-' is saved in words like 'что-либо' etc)
     -- 'ё' is not replaced with 'e'
 
     :param s: unicode string
@@ -71,8 +46,26 @@ def clear_poem(s):
     s = s.lower()
     s = delete.sub(' ', s)
     s = clr.sub(u' ', s).strip()
+    s = s.replace(u' - ', u' ')
     s = s.split()
-    s = [i for i in s if i != u'-']
+
+    for i in xrange(len(s)):
+        if s[i].startswith(u'-'):
+            for j in xrange(len(s[i])):
+                if s[i][j] == u'-':
+                    continue
+                s[i] = s[i][j:]
+                break
+
+    for i in xrange(len(s)):
+        if s[i].endswith(u'-'):
+            for j in reversed(xrange(len(s[i]))):
+                if s[i][j] == u'-':
+                    continue
+                s[i] = s[i][:j+1]
+                break
+
+
     s = u' '.join(s)
     return s
 
@@ -109,17 +102,21 @@ def get_normal(word):
     morph = pymorphy2.MorphAnalyzer()
     forms = morph.parse(word)
     normal = []
+
     for item in forms:
         pos = item.tag.POS
         if pos in pos_match.keys():
             pos = pos_match[pos]
-        p = (item.normal_form, pos)
+        p = (yo_replace(item.normal_form), pos)
         if p not in normal:
             normal.append(p)
+
     return normal
 
 
 if __name__ == '__main__':
-    for item in get_normal(u'стали'):
-        print item[0], item[1]
-    print clear_request(u'Кто-то где-то    и может - это или что-то  Ёж и ёлочка  куда-то')
+    w = clear(u'Кто-то где-то    и может - --это или-- что-то-  -Ёж- и- ёлочка  куда-то')
+
+    for item in w.split():
+        item = get_normal(item)
+        print item[0][0], item[0][1]
