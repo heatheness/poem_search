@@ -40,7 +40,6 @@ def poems_to_list(path=u'oster.txt'):
 
 
 def init_index():
-
     """
     :return index like {normal_form : [(poem number, position in poem), (poem number, position in poem) ... ]}
     :rtype: dict
@@ -70,7 +69,7 @@ def create_index():
     for i in xrange(len(poems)):
         print 'creating index for poem ...', i
         position = 0
-        sen = clear(poems[i]).split()
+        sen = clear(poems[i])
         for word in sen:
             normal = get_normal(word)
             forms = {i[0] for i in normal}

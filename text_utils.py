@@ -14,9 +14,8 @@ import re
 __author__ = 'nyash myash'
 
 
-delete = re.compile(u'[^а-яА-Я\-ёЁ0-9]+?', re.UNICODE)
+delete = re.compile(u'[^а-яА-Я\-ёЁ0-9a-zA-Z]+?', re.UNICODE)
 clr = re.compile(r'\s+', re.UNICODE)
-
 
 def yo_replace(s):
     """
@@ -42,6 +41,30 @@ def clear(s):
     :return: lowercased unicode string without punctuation and other non-letter symbols
     :rtype: list
     """
+    digit_base = {
+        u'0':u'о',
+        u'3':u'з',
+        u'6':u'б',
+        u'8':u'в',
+        u'1':u''
+    }
+
+    latin_base = {
+        u'h':u'н',
+        u'o':u'о',
+        u'e':u'е',
+        u'p':u'р',
+        u'x':u'х',
+        u't':u'т',
+        u'y':u'у',
+        u'a':u'а',
+        u'd':u'д',
+        u'k':u'к',
+        u'm':u'м',
+        u'c':'с',
+        u'b':'в',
+        u'f':'ф',
+    }
 
     s = s.lower()
     s = delete.sub(' ', s)
@@ -64,6 +87,18 @@ def clear(s):
                     continue
                 s[i] = s[i][:j+1]
                 break
+
+    for i in xrange(len(s)):
+        if re.findall(u'\d+[а-яА-Я\-ёЁ]+|[а-яА-Я\-ёЁ]+\d', s[i]):
+            for j in s[i]:
+                if j in digit_base.keys():
+                    s[i] = s[i].replace(j,digit_base[j])
+
+    for i in xrange(len(s)):
+        if re.findall(u'[a-zA-Z]+', s[i]):
+            for j in s[i]:
+                if j in latin_base.keys():
+                    s[i] = s[i].replace(j,latin_base[j])
     return s
 
 
@@ -113,7 +148,23 @@ def get_normal(word):
 
 if __name__ == '__main__':
     w = clear(u'Кто-то где-то    и может - --это или-- что-то-  -Ёж- и- ёлочка  куда-то')
-
     for item in w:
-        item = get_normal(item)
-        print item[0][0], item[0][1]
+        print item
+    print
+
+    w = clear(u'0дывлоа 185 0ыоало0ыдлао ыатдло0 8ывла8 длолдао33апт 0статься 03')
+    for item in w:
+        print item
+    print
+
+    w = clear(u'60дATь')
+    print w[0]
+    print
+
+    p = get_normal(clear(u'60дAtь')[0])
+    for item in p:
+        print item[0], item[1]
+
+    # for item in w:
+    #     item = get_normal(item)
+    #     print item[0][0], item[0][1]
