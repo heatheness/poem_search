@@ -10,7 +10,7 @@ Functions:
 
 import codecs
 import json
-from text_utils import get_normal, clear, yo_replace
+from text_utils import get_normal, clear
 
 __author__ = 'nyash myash'
 
@@ -75,6 +75,10 @@ def create_index():
             forms = {i[0] for i in normal}
             for item in forms:
                 location = (i, position)
+                if u'-' in item:
+                    parts = {i for i in item.split(u'-')}
+                    for p in parts:
+                        cur_index.setdefault(p, []).append(location)
                 cur_index.setdefault(item, []).append(location)
             position += 1
 

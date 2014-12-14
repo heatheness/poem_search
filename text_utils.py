@@ -5,6 +5,8 @@ Module contains basic functions for handling text
 -- clear_request
 -- clear
 -- get_normal
+-- translit
+-- keymap
 
 """
 
@@ -279,7 +281,7 @@ if __name__ == '__main__':
         print item[0], item[1]
 
     w = map(keymap, u'vj;tn b yt vj;tn dczrjt ,sdftn d njv nj dcz b rhfcjnf rhfcbdsq wfgkz b pfrfn e t;f yf gjkejcnhjdt \
-    c otkrjq [jnz cbnj gm`n vjkjrj ,eltn abyfkmysq xfq yf itgjn c]tcn rjrjc gm`n'.split())
+    c otkrjq [jnz cbnj gm`n vjkjrj ,eltn abyfkmysq xfq yf itgjn c]tcn rjrjc gm`n abfkrf hjpjdsq lj;lm'.split())
     for item in w:
         print item
 
