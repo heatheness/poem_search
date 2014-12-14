@@ -183,7 +183,6 @@ def translit(text):
         u'"' : u'ъ',
         u'y' : u'ы',
         u'\'' : u'ь',
-        u'e' : u'',
         u'yu' : u'ю',
         u'ya' : u'я'
     }
@@ -205,29 +204,81 @@ def translit(text):
     return ''.join(translitstring)
 
 
+def keymap(word):
+
+    """
+    :param word: unicode word typed with keybord lang (ru word with en keybord)
+    :type word: str
+    :return: ru word
+    :rtype: str
+    """
+    base = {
+        u'q': u'й',
+        u'w': u'ц',
+        u'e': u'у',
+        u'r': u'к',
+        u't': u'е',
+        u'y': u'н',
+        u'u' : u'г',
+        u'i' : u'ш',
+        u'o' : u'щ',
+        u'p' : u'з',
+        u'[' : u'х',
+        u']' : u'ъ',
+        u'a' : u'ф',
+        u's' : u'ы',
+        u'd' : u'в',
+        u'f' : u'а',
+        u'g' : u'п',
+        u'h' : u'р',
+        u'j' : u'о',
+        u'k' : u'л',
+        u'l' : u'д',
+        u';' : u'ж',
+        u"'" : u'э',
+        u'§' : u'ч',
+        u'z' : u'я',
+        u'x' : u'ч',
+        u'c' : u'с',
+        u'v' : u'м',
+        u'b' : u'и',
+        u'n' : u'т',
+        u'm' : u'ь',
+        u',' : u'б',
+        u'.' : u'ю',
+        u'`' : u'ё'
+    }
+
+    return u''.join([base[i] for i in word])
 
 
 if __name__ == '__main__':
-    w = clear(u'Кто-то где-то    и может - --это или-- что-то-  -Ёж- и- ёлочка  куда-то')
+    # w = clear(u'Кто-то где-то    и может - --это или-- что-то-  -Ёж- и- ёлочка  куда-то')
+    # for item in w:
+    #     print item
+    # print
+    #
+    # w = clear(u'0дывлоа 185 0ыоало0ыдлао ыатдло0 8ывла8 длолдао33апт 0статься 03')
+    # for item in w:
+    #     print item
+    # print
+    #
+    # w = clear(u'60дATь')
+    # print w[0]
+    # print
+    #
+    # p = get_normal(clear(u'60дAtь')[0])
+    # for item in p:
+    #     print item[0], item[1]
+    #
+    # print translit(u'domashniiy')
+    # print translit(u'pirog')
+
+
+    w = map(keymap, u'vj;tn b yt vj;tn dczrjt ,sdftn d njv nj dcz b rhfcjnf rhfcbdsq wfgkz b pfrfn e t;f yf gjkejcnhjdt \
+    c otkrjq [jnz cbnj gm`n vjkjrj ,eltn abyfkmysq xfq yf itgjn c]tcn rjrjc gm`n'.split())
     for item in w:
         print item
-    print
-
-    w = clear(u'0дывлоа 185 0ыоало0ыдлао ыатдло0 8ывла8 длолдао33апт 0статься 03')
-    for item in w:
-        print item
-    print
-
-    w = clear(u'60дATь')
-    print w[0]
-    print
-
-    p = get_normal(clear(u'60дAtь')[0])
-    for item in p:
-        print item[0], item[1]
-
-    print translit('domashniiy')
-    print translit('pirog')
 
     # for item in w:
     #     item = get_normal(item)
