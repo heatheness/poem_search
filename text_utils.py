@@ -145,6 +145,67 @@ def get_normal(word):
 
     return normal
 
+def translit(text):
+    """
+    :param text: unicode string in latin
+    :type text: str
+    :return: unicode string in cyrillic
+    :rtype: str
+    """
+    base = {
+        u'a': u'а',
+        u'b': u'б',
+        u'v': u'в',
+        u'g': u'г',
+        u'd': u'д',
+        u'e': u'е',
+        u'yo' : u'е',
+        u'zh' : u'ж',
+        u'z' : u'з',
+        u'i' : u'и',
+        u'iy' : u'й',
+        u'k' : u'к',
+        u'l' : u'л',
+        u'm' : u'м',
+        u'n' : u'н',
+        u'o' : u'о',
+        u'p' : u'п',
+        u'r' : u'р',
+        u's' : u'с',
+        u't' : u'т',
+        u'u' : u'у',
+        u'f' : u'ф',
+        u'h' : u'х',
+        u'ts' : u'ц',
+        u'ch' : u'ч',
+        u'sh' : u'ш',
+        u'sch' : u'щ',
+        u'"' : u'ъ',
+        u'y' : u'ы',
+        u'\'' : u'ь',
+        u'e' : u'',
+        u'yu' : u'ю',
+        u'ya' : u'я'
+    }
+
+
+    translitstring = []
+    keys = base.keys()
+    l = len(text)
+    i = 0
+    while i<l:
+        if i+3 <= l and text[i:i+3] in keys:
+            k = i+3
+        elif i+2 <= l and text[i:i+2] in keys:
+            k = i+2
+        else:
+            k = i+1
+        translitstring.append(base[text[i:k]])
+        i+= k-i
+    return ''.join(translitstring)
+
+
+
 
 if __name__ == '__main__':
     w = clear(u'Кто-то где-то    и может - --это или-- что-то-  -Ёж- и- ёлочка  куда-то')
@@ -164,6 +225,9 @@ if __name__ == '__main__':
     p = get_normal(clear(u'60дAtь')[0])
     for item in p:
         print item[0], item[1]
+
+    print translit('domashniiy')
+    print translit('pirog')
 
     # for item in w:
     #     item = get_normal(item)
