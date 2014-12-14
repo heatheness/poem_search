@@ -21,13 +21,17 @@ def result_formatter(results):
     """
     if not results:
         return u'No results for your request'
+
     results = [u'\n- {} -\n{}\n'.format(res[0]+1, res[1]) for res in results]
     return u''.join(results)
 
 while True:
-    req = raw_input(prompt)
+    req = raw_input(prompt).decode(encoding='utf-8')
     if req == u'exit':
         print u'Bye!'
         break
-    result = process_request(req)
+    try:
+        result = process_request(req)
+    except KeyError, ex:
+        result = None
     print result_formatter(result)
