@@ -3,8 +3,8 @@
 Module for holding poems and index object.
 If you need a poem or data from index - get it from here
 Functions:
--- get_poem. returns poem by poem number
--- get_index_data. returns index data by normalized word
+-- get_poem
+-- get_index_data
 
 """
 
@@ -17,12 +17,11 @@ __author__ = 'nyash myash'
 
 def poems_to_list(path=u'oster.txt'):
     """
-    :param path: path to in txt file with poems separated  with '* * *'
+    :param path: path to txt file with poems separated  with '* * *'
     :type path: str
     :returns list of poems
     :rtype: list
     """
-
     f = codecs.open(path, encoding=u'utf-8')
     poems = []
     s = u''
@@ -30,7 +29,7 @@ def poems_to_list(path=u'oster.txt'):
         if line == u'\n':
             continue
         elif line != u'* * *\n':
-            s+= line
+            s += line
         else:
             poems.append(s)
             s = u''
@@ -46,7 +45,6 @@ def init_index():
     :return index like {normal_form : [(poem number, position in poem), (poem number, position in poem) ... ]}
     :rtype: dict
     """
-    global poems
 
     try:
         with codecs.open('index.txt', 'r', encoding='utf-8') as f:
@@ -109,7 +107,6 @@ def get_index_data(word):
     """
     global poems_index
     return poems_index[word]
-
 
 poems = poems_to_list()
 poems_index = init_index()
