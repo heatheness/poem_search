@@ -17,6 +17,8 @@ __author__ = 'nyash myash'
 
 delete = re.compile(u'[^а-яА-Я\-ёЁ0-9a-zA-Z]+?', re.UNICODE)
 clr = re.compile(r'\s+', re.UNICODE)
+morph = pymorphy2.MorphAnalyzer() # this is out of function for speed increasing
+
 
 
 def yo_replace(s):
@@ -113,6 +115,8 @@ def get_normal(word):
     :rtype: list
     """
 
+    global morph
+
     pos_match = {
         u'NOUN': u'существительное',
         u'ADJF': u'прилагательное',
@@ -133,7 +137,6 @@ def get_normal(word):
         u'INTJ': u'междометие',
     }
 
-    morph = pymorphy2.MorphAnalyzer()
     forms = morph.parse(word)
     normal = []
 
@@ -148,7 +151,7 @@ def get_normal(word):
     return normal
 
 
-def translit(text):
+def translit(word):
     """
     :param text: unicode string in latin
     :type text: str
@@ -190,20 +193,20 @@ def translit(text):
         u'ya': u'я'
     }
 
-    translitstring = []
+    translit = []
     keys = base.keys()
-    l = len(text)
+    l = len(word)
     i = 0
     while i < l:
-        if i + 3 <= l and text[i:i + 3] in keys:
+        if i + 3 <= l and word[i:i + 3] in keys:
             k = i + 3
-        elif i + 2 <= l and text[i:i + 2] in keys:
+        elif i + 2 <= l and word[i:i + 2] in keys:
             k = i + 2
         else:
             k = i + 1
-        translitstring.append(base[text[i:k]])
+        translit.append(base[word[i:k]])
         i += k - i
-    return ''.join(translitstring)
+    return ''.join(translit)
 
 
 def keymap(word):
@@ -255,6 +258,8 @@ def keymap(word):
 
 
 if __name__ == '__main__':
+    import timeit
+    start = timeit.default_timer()
     # w = clear(u'Кто-то где-то    и может - --это или-- что-то-  -Ёж- и- ёлочка  куда-то')
     # for item in w:
     #     print item
@@ -268,22 +273,28 @@ if __name__ == '__main__':
     # w = clear(u'60дATь')
     # print w[0]
     # print
-    #
-    # p = get_normal(clear(u'60дAtь')[0])
+
+    p = get_normal(u'стали')
+    f = get_normal(u'петь')
+    g = get_normal(u'создавать')
+    u = get_normal(u'творить')
+    q = get_normal(u'исследовать')
+    a = get_normal(u'пробовать')
+    print timeit.default_timer() - start
     # for item in p:
     #     print item[0], item[1]
     #
     # print translit(u'domashniiy')
     # print translit(u'pirog')
 
-    p = get_normal(clear(u'60дAtь')[0])
-    for item in p:
-        print item[0], item[1]
+    # p = get_normal(clear(u'60дAtь')[0])
+    # for item in p:
+    #     print item[0], item[1]
 
-    w = map(keymap, u'vj;tn b yt vj;tn dczrjt ,sdftn d njv nj dcz b rhfcjnf rhfcbdsq wfgkz b pfrfn e t;f yf gjkejcnhjdt \
-    c otkrjq [jnz cbnj gm`n vjkjrj ,eltn abyfkmysq xfq yf itgjn c]tcn rjrjc gm`n abfkrf hjpjdsq lj;lm'.split())
-    for item in w:
-        print item
+    # w = map(keymap, u'vj;tn b yt vj;tn dczrjt ,sdftn d njv nj dcz b rhfcjnf rhfcbdsq wfgkz b pfrfn e t;f yf gjkejcnhjdt \
+    # c otkrjq [jnz cbnj gm`n vjkjrj ,eltn abyfkmysq xfq yf itgjn c]tcn rjrjc gm`n abfkrf hjpjdsq lj;lm'.split())
+    # for item in w:
+    #     print item
 
     # for item in w:
     # item = get_normal(item)
