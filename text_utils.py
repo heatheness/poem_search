@@ -13,9 +13,9 @@ import re
 
 __author__ = 'nyash myash'
 
-
 delete = re.compile(u'[^а-яА-Я\-ёЁ0-9a-zA-Z]+?', re.UNICODE)
 clr = re.compile(r'\s+', re.UNICODE)
+
 
 def yo_replace(s):
     """
@@ -42,28 +42,28 @@ def clear(s):
     :rtype: list
     """
     digit_base = {
-        u'0':u'о',
-        u'3':u'з',
-        u'6':u'б',
-        u'8':u'в',
-        u'1':u''
+        u'0': u'о',
+        u'3': u'з',
+        u'6': u'б',
+        u'8': u'в',
+        u'1': u''
     }
 
     latin_base = {
-        u'h':u'н',
-        u'o':u'о',
-        u'e':u'е',
-        u'p':u'р',
-        u'x':u'х',
-        u't':u'т',
-        u'y':u'у',
-        u'a':u'а',
-        u'd':u'д',
-        u'k':u'к',
-        u'm':u'м',
-        u'c':'с',
-        u'b':'в',
-        u'f':'ф',
+        u'h': u'н',
+        u'o': u'о',
+        u'e': u'е',
+        u'p': u'р',
+        u'x': u'х',
+        u't': u'т',
+        u'y': u'у',
+        u'a': u'а',
+        u'd': u'д',
+        u'k': u'к',
+        u'm': u'м',
+        u'c': u'с',
+        u'b': u'в',
+        u'f': u'ф',
     }
 
     s = s.lower()
@@ -85,20 +85,20 @@ def clear(s):
             for j in reversed(xrange(len(s[i]))):
                 if s[i][j] == u'-':
                     continue
-                s[i] = s[i][:j+1]
+                s[i] = s[i][:j + 1]
                 break
 
     for i in xrange(len(s)):
         if re.findall(u'\d+[а-яА-Я\-ёЁ]+|[а-яА-Я\-ёЁ]+\d', s[i]):
             for j in s[i]:
                 if j in digit_base.keys():
-                    s[i] = s[i].replace(j,digit_base[j])
+                    s[i] = s[i].replace(j, digit_base[j])
 
     for i in xrange(len(s)):
         if re.findall(u'[a-zA-Z]+', s[i]):
             for j in s[i]:
                 if j in latin_base.keys():
-                    s[i] = s[i].replace(j,latin_base[j])
+                    s[i] = s[i].replace(j, latin_base[j])
     return s
 
 
@@ -145,6 +145,7 @@ def get_normal(word):
 
     return normal
 
+
 def translit(text):
     """
     :param text: unicode string in latin
@@ -159,48 +160,47 @@ def translit(text):
         u'g': u'г',
         u'd': u'д',
         u'e': u'е',
-        u'yo' : u'е',
-        u'zh' : u'ж',
-        u'z' : u'з',
-        u'i' : u'и',
-        u'iy' : u'й',
-        u'k' : u'к',
-        u'l' : u'л',
-        u'm' : u'м',
-        u'n' : u'н',
-        u'o' : u'о',
-        u'p' : u'п',
-        u'r' : u'р',
-        u's' : u'с',
-        u't' : u'т',
-        u'u' : u'у',
-        u'f' : u'ф',
-        u'h' : u'х',
-        u'ts' : u'ц',
-        u'ch' : u'ч',
-        u'sh' : u'ш',
-        u'sch' : u'щ',
-        u'"' : u'ъ',
-        u'y' : u'ы',
-        u'\'' : u'ь',
-        u'yu' : u'ю',
-        u'ya' : u'я'
+        u'yo': u'е',
+        u'zh': u'ж',
+        u'z': u'з',
+        u'i': u'и',
+        u'iy': u'й',
+        u'k': u'к',
+        u'l': u'л',
+        u'm': u'м',
+        u'n': u'н',
+        u'o': u'о',
+        u'p': u'п',
+        u'r': u'р',
+        u's': u'с',
+        u't': u'т',
+        u'u': u'у',
+        u'f': u'ф',
+        u'h': u'х',
+        u'ts': u'ц',
+        u'ch': u'ч',
+        u'sh': u'ш',
+        u'sch': u'щ',
+        u'"': u'ъ',
+        u'y': u'ы',
+        u'\'': u'ь',
+        u'yu': u'ю',
+        u'ya': u'я'
     }
-
 
     translitstring = []
     keys = base.keys()
     l = len(text)
     i = 0
-    while i<l:
-        if i+3 <= l and text[i:i+3] in keys:
-            k = i+3
-        elif i+2 <= l and text[i:i+2] in keys:
-            k = i+2
+    while i < l:
+        if i + 3 <= l and text[i:i + 3] in keys:
+            k = i + 3
+        elif i + 2 <= l and text[i:i + 2] in keys:
+            k = i + 2
         else:
-            k = i+1
+            k = i + 1
         translitstring.append(base[text[i:k]])
-        i+= k-i
+        i += k - i
     return ''.join(translitstring)
 
 
@@ -274,6 +274,9 @@ if __name__ == '__main__':
     # print translit(u'domashniiy')
     # print translit(u'pirog')
 
+    p = get_normal(clear(u'60дAtь')[0])
+    for item in p:
+        print item[0], item[1]
 
     w = map(keymap, u'vj;tn b yt vj;tn dczrjt ,sdftn d njv nj dcz b rhfcjnf rhfcbdsq wfgkz b pfrfn e t;f yf gjkejcnhjdt \
     c otkrjq [jnz cbnj gm`n vjkjrj ,eltn abyfkmysq xfq yf itgjn c]tcn rjrjc gm`n'.split())
@@ -281,5 +284,5 @@ if __name__ == '__main__':
         print item
 
     # for item in w:
-    #     item = get_normal(item)
+    # item = get_normal(item)
     #     print item[0][0], item[0][1]

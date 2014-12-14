@@ -13,9 +13,12 @@ from text_utils import get_normal, clear
 __author__ = 'mayns'
 
 KEY = u'dict.1.1.20141207T200218Z.c01ef3f11cea86bf.3421773cbca3c8c8872988fc567a3815f27c0159'
-YA_REQUEST = \
+YA_SYNONYMS = \
     lambda text, lang: u'https://dictionary.yandex.net/api/v1/dicservice.json/lookup?key={key}&lang=' \
                              u'{lang}&text={text}&ui=ru'.format(key=KEY, lang=lang, text=quote(text.encode('utf-8')))
+
+YA_SPELLER = \
+    lambda text: u'http://speller.yandex.net/services/spellservice.json/checkText?text={text}'.format(text=quote(text.encode('utf-8')))
 
 
 def get_syns(words, lang=u'ru-ru'):
@@ -27,7 +30,7 @@ def get_syns(words, lang=u'ru-ru'):
     syns_variants = []
     for word in words:
         word_syns = set()
-        resp = urllib2.urlopen(YA_REQUEST(word[0], lang)).read()
+        resp = urllib2.urlopen(YA_SYNONYMS(word[0], lang)).read()
         syns = json.loads(resp).get(u'def')
         if not syns:
             continue
@@ -43,6 +46,27 @@ def get_syns(words, lang=u'ru-ru'):
                 map(lambda x: word_syns.add(x['text']), syn['syn'])
         syns_variants.extend(list(word_syns))
     return syns_variants
+
+
+def corrected_spell(word):
+    corrected = []
+    try:
+        resp = urllib2.urlopen(YA_SPELLER(word)).read()
+
+    except Exception, ex:
+        print u'ex', ex
+        return []
+    variants = json.loads(resp)
+
+    if not variants:
+        return []
+
+    for var in variants:
+
+        if u's' in var:
+            corrected.extend(var[u's'])
+
+    return corrected
 
 
 def amazing_fun(boring_string, lang=u'ru-ru'):
@@ -76,4 +100,5 @@ def amazing_fun(boring_string, lang=u'ru-ru'):
     return amazing_variants
 
 if __name__ == u'__main__':
-    amazing_fun(u'ночь на ладони')
+    for c in corrected_spell(u'ингридиенты'):
+        print c
