@@ -76,8 +76,8 @@ def create_index():
             forms = {i[0] for i in normal}
             for item in forms:
                 location = (i, position)
-                cur_index.setdefault(yo_replace(item), []).append(location)
-            position +=1
+                cur_index.setdefault(item, []).append(location)
+            position += 1
 
     storage_index = json.dumps(cur_index)
     with codecs.open('index.txt', 'w', encoding='utf-8') as f:

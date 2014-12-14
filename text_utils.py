@@ -40,7 +40,7 @@ def clear(s):
     :param s: unicode string
     :type s: str
     :return: lowercased unicode string without punctuation and other non-letter symbols
-    :rtype: str
+    :rtype: list
     """
 
     s = s.lower()
@@ -64,9 +64,6 @@ def clear(s):
                     continue
                 s[i] = s[i][:j+1]
                 break
-
-
-    s = u' '.join(s)
     return s
 
 
@@ -117,6 +114,6 @@ def get_normal(word):
 if __name__ == '__main__':
     w = clear(u'Кто-то где-то    и может - --это или-- что-то-  -Ёж- и- ёлочка  куда-то')
 
-    for item in w.split():
+    for item in w:
         item = get_normal(item)
         print item[0][0], item[0][1]

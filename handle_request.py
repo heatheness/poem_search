@@ -8,6 +8,7 @@ from urllib import quote
 import urllib2
 import json
 from itertools import *
+from text_utils import get_normal, clear
 
 __author__ = 'mayns'
 
@@ -46,8 +47,15 @@ def get_syns(words, lang=u'ru-ru'):
 
 def amazing_fun(boring_string, lang=u'ru-ru'):
 
+    """
+
+    :param boring_string:
+    :type boring_string: str
+    :return:
+    :rtype: list
+    """
     variants = []
-    raw = boring_string.split(u' ')
+    raw = clear(boring_string)
     original = [get_normal(w) for w in raw]
 
     for version in original:
