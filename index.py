@@ -11,7 +11,7 @@ Functions:
 import codecs
 import json
 from text_utils import get_normal, clear
-from  handle_request import corrected_spell
+from handle_request import corrected_spell
 
 
 __author__ = 'nyash myash'
@@ -73,7 +73,9 @@ def create_index():
         position = 0
         sen = clear(poems[i])
         for term in sen:
-            corrects = corrected_spell(term).append(term)
+            corrects = list(term)
+            spell = corrected_spell(term)
+            if spell: corrects.extend(spell)
             for word in corrects:
                 normal = get_normal(word)
                 forms = {i[0] for i in normal}

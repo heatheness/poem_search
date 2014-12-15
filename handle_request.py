@@ -54,7 +54,7 @@ def corrected_spell(word):
         resp = urllib2.urlopen(YA_SPELLER(word)).read()
 
     except Exception, ex:
-        print u'ex', ex
+        # print u'ex', ex
         return []
     variants = json.loads(resp)
 
