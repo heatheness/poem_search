@@ -73,7 +73,7 @@ def create_index():
         position = 0
         sen = clear(poems[i])
         for term in sen:
-            corrects = list(term)
+            corrects = [term]
             spell = corrected_spell(term)
             if spell: corrects.extend(spell)
             for word in corrects:
@@ -127,4 +127,4 @@ if __name__ == "__main__":
         print u'{0:14} ==> {1}'.format(key, poems_index[key])
 
     # print get_poem(114)
-
+    # print get_poem(82)
