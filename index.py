@@ -11,6 +11,8 @@ Functions:
 import codecs
 import json
 from text_utils import get_normal, clear
+from  handle_request import corrected_spell
+
 
 __author__ = 'nyash myash'
 
@@ -70,16 +72,18 @@ def create_index():
         print 'creating index for poem ...', i
         position = 0
         sen = clear(poems[i])
-        for word in sen:
-            normal = get_normal(word)
-            forms = {i[0] for i in normal}
-            for item in forms:
-                location = (i, position)
-                if u'-' in item:
-                    parts = {i for i in item.split(u'-')}
-                    for p in parts:
-                        cur_index.setdefault(p, []).append(location)
-                cur_index.setdefault(item, []).append(location)
+        for term in sen:
+            corrects = corrected_spell(term).append(term)
+            for word in corrects:
+                normal = get_normal(word)
+                forms = {i[0] for i in normal}
+                for item in forms:
+                    location = (i, position)
+                    if u'-' in item:
+                        parts = {i for i in item.split(u'-')}
+                        for p in parts:
+                            cur_index.setdefault(p, []).append(location)
+                    cur_index.setdefault(item, []).append(location)
             position += 1
 
     storage_index = json.dumps(cur_index)
@@ -119,3 +123,6 @@ if __name__ == "__main__":
 
     for key in sorted(poems_index.keys()):
         print u'{0:14} ==> {1}'.format(key, poems_index[key])
+
+    # print get_poem(114)
+

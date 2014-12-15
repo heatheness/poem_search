@@ -103,6 +103,7 @@ def clear(s):
             for j in s[i]:
                 if j in latin_base.keys():
                     s[i] = s[i].replace(j, latin_base[j])
+
     return s
 
 
@@ -258,8 +259,8 @@ def keymap(word):
 
 
 if __name__ == '__main__':
-    import timeit
-    start = timeit.default_timer()
+    # import timeit
+    # start = timeit.default_timer()
     # w = clear(u'Кто-то где-то    и может - --это или-- что-то-  -Ёж- и- ёлочка  куда-то')
     # for item in w:
     #     print item
@@ -274,22 +275,22 @@ if __name__ == '__main__':
     # print w[0]
     # print
 
-    p = get_normal(u'стали')
-    f = get_normal(u'петь')
-    g = get_normal(u'создавать')
-    u = get_normal(u'творить')
-    q = get_normal(u'исследовать')
-    a = get_normal(u'пробовать')
-    print timeit.default_timer() - start
+    # p = get_normal(u'стали')
+    # f = get_normal(u'петь')
+    # g = get_normal(u'создавать')
+    # u = get_normal(u'творить')
+    # q = get_normal(u'исследовать')
+    # a = get_normal(u'пробовать')
+    # print timeit.default_timer() - start
     # for item in p:
     #     print item[0], item[1]
     #
     # print translit(u'domashniiy')
     # print translit(u'pirog')
 
-    # p = get_normal(clear(u'60дAtь')[0])
-    # for item in p:
-    #     print item[0], item[1]
+    p = get_normal(u'ожет')
+    for item in p:
+        print item[0], item[1]
 
     # w = map(keymap, u'vj;tn b yt vj;tn dczrjt ,sdftn d njv nj dcz b rhfcjnf rhfcbdsq wfgkz b pfrfn e t;f yf gjkejcnhjdt \
     # c otkrjq [jnz cbnj gm`n vjkjrj ,eltn abyfkmysq xfq yf itgjn c]tcn rjrjc gm`n abfkrf hjpjdsq lj;lm'.split())
