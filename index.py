@@ -127,4 +127,3 @@ if __name__ == "__main__":
         print u'{0:14} ==> {1}'.format(key, poems_index[key])
 
     # print get_poem(114)
-    # print get_poem(82)
