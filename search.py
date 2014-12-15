@@ -85,6 +85,61 @@ def get_req_variants(req):
 #                 return req, variant
 #     return
 
+def get_word_type(word):
+  return #TODO need to place anywhere dict with req types of words
+
+def get_len_score(elem):
+  scoring_dict = {'n':1,'p':2}
+  score = 0
+  for word in elem.values():
+    score += scoring_dict(get_word_type(word))
+    
+def get_pos_score(elem):
+def get_identical_words_score(elem):
+
+def check_phrase(phrase):
+  res_dict = {}
+  
+  for word in phrase:
+    #w_t is (pid:pos)
+    w_t = get_index_data(word)
+    for elem in w_t:
+      pid = w_t[0]
+      if pid is not in res_dict:
+        res_dict[pid] = {word:[w_t[1]]}
+      else:
+        val = res_dict[pid][word]
+        val.append(w_t[1])
+        res_dict[pid] = {word:val}
+
+  if not res_dict:
+    return none
+
+  maxlen = max([len(el.keys) for el in res_dict])
+  cands = [pid for pid in res_dict if len(res_dict[pid].keys) == maxlen]
+ 
+  #elem is [{pid:{word:[positions]}},(len_score,pos_score, identical_words_score)]
+  result = []
+  for elem in cands:
+    len_score = get_len_score(elem)
+    pos_score = get_pos_score(elem)
+    identical_words_score = get_identical_words_score(elem)
+    result.append([elem, (len_score,pos_score,identical_words_score)]) 
+  
+  return result   
+  
+def process_request(request):
+  search_phrases = amazing_fun(request)
+
+  result = []
+  for phrase in search_phrases:
+    result.append(check_phrase(phrase))
+  
+  #TODO sort result by len_score
+  #TODO sort result by pos_score
+  #TODO sort result by identical_words_score
+  final_res = []
+  return final_res
 
 def get_intersection(indexes):
     sets = []
