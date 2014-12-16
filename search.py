@@ -95,7 +95,12 @@ def get_len_score(elem):
     score += scoring_dict(get_word_type(word))
     
 def get_pos_score(elem):
+  #TODO implement
+  return 
+
 def get_identical_words_score(elem):
+  #TODO implement
+  return 
 
 def check_phrase(phrase):
   res_dict = {}
@@ -105,7 +110,7 @@ def check_phrase(phrase):
     w_t = get_index_data(word)
     for elem in w_t:
       pid = w_t[0]
-      if pid is not in res_dict:
+      if pid not in res_dict:
         res_dict[pid] = {word:[w_t[1]]}
       else:
         val = res_dict[pid][word]
@@ -118,27 +123,35 @@ def check_phrase(phrase):
   maxlen = max([len(el.keys) for el in res_dict])
   cands = [pid for pid in res_dict if len(res_dict[pid].keys) == maxlen]
  
-  #elem is [{pid:{word:[positions]}},(len_score,pos_score, identical_words_score)]
-  result = []
+  #elem is ({word:[positions]},len_score,pos_score, identical_words_score)
+  result = {}
   for elem in cands:
     len_score = get_len_score(elem)
     pos_score = get_pos_score(elem)
     identical_words_score = get_identical_words_score(elem)
-    result.append([elem, (len_score,pos_score,identical_words_score)]) 
+    result[elem] = (res_dict[elem],len_score,pos_score,identical_words_score) 
   
   return result   
   
 def process_request(request):
   search_phrases = amazing_fun(request)
 
-  result = []
+  result = {}
+  #only the most len_scored elem with identical pid remains
   for phrase in search_phrases:
-    result.append(check_phrase(phrase))
-  
-  #TODO sort result by len_score
+    tmp_res = check_phrase(phrase)
+    for pid in tmp_res:
+      if pid not in result:
+        result[pid] = tmp_res[pid]
+      else:
+        if len(tmp_res[pid][0].keys()) > len(result[pid][0].keys()):
+          result[pid] = tmp_res[pid]
+ 
+  final_res = result.keys()
+  #sort result by len_score
+  sorted(final_res, key=lambda pid: result[pid](1))
   #TODO sort result by pos_score
   #TODO sort result by identical_words_score
-  final_res = []
   return final_res
 
 def get_intersection(indexes):
