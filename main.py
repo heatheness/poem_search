@@ -33,5 +33,5 @@ while True:
     try:
         result = process_request(req)
     except KeyError, ex:
-        result = None
+      result = None
     print result_formatter(result)
