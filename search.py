@@ -9,6 +9,8 @@ from text_utils import clear, get_normal
 from index import get_index_data, get_poem
 from itertools import *
 from handle_request import amazing_fun
+from collections import OrderedDict
+import operator
 
 __author__ = 'mayns'
 
@@ -108,15 +110,17 @@ def get_req_variants(req):
 #     return
 
 def get_len_score(elem, normalized_req):
+  return 1
   score = 0
-  for elem in req.values():
-    score += word_type_scores(elem[1])
+  for elem in normalized_req:
+    #TODO change dict
+    score += word_type_scores[elem[1]]
   return score
     
 def get_pos_score(elem):
   ctr = 0
-  for word_id in elem.values():
-    ctr+=len(elem.values[word_id])
+  for word_id in elem:
+    ctr+=len(elem[word_id])
   return ctr
 
 def get_identical_words_score(elem):
@@ -133,23 +137,23 @@ def check_phrase(phrase, normalized_req):
       pid = elem[0]
       if pid not in res_dict.keys():
         res_dict[pid] = {word:[elem[1]]}
-      else:
+      elif word in res_dict[pid].values():
         val = res_dict[pid][word]
         val.append(w_t[1])
         res_dict[pid] = {word:val}
-
   if not res_dict:
-    return none
+    return None
 
-  maxlen = max([len(el.keys) for el in res_dict])
-  cands = [pid for pid in res_dict if len(res_dict[pid].keys) == maxlen]
+  maxlen = max([len(res_dict[el].keys()) for el in res_dict])
+  cands = [pid for pid in res_dict if len(res_dict[pid].keys()) == maxlen]
  
   #elem is ({word:[positions]},len_score,pos_score, identical_words_score)
   result = {}
   for elem in cands:
-    len_score = get_len_score(elem, normalized_req)
-    pos_score = get_pos_score(elem)
-    identical_words_score = get_identical_words_score(elem)
+    to_check = res_dict[elem]
+    len_score = get_len_score(to_check, normalized_req)
+    pos_score = get_pos_score(to_check)
+    identical_words_score = get_identical_words_score(to_check)
     result[elem] = (res_dict[elem],len_score,pos_score,identical_words_score) 
   
   return result   
@@ -157,8 +161,7 @@ def check_phrase(phrase, normalized_req):
 def normalize_req(req):
   clean_req = clear(req)
   normal_req = [get_normal(w)[0] for w in clean_req]
-  flatten_variants = [x[0] for x in normal_req]
-  return flatten_variants
+  return normal_req
   
 def process_request(request):
   search_phrases = amazing_fun(request)
@@ -167,16 +170,18 @@ def process_request(request):
   #only the most len_scored elem with identical pid remains
   for phrase in search_phrases:
     normalized_req = normalize_req(phrase)
-    tmp_res = check_phrase(phrase, normalize_req)
+    tmp_res = check_phrase(phrase.split(), normalized_req)
+    if not tmp_res:
+      continue
     for pid in tmp_res:
       if pid not in result:
         result[pid] = tmp_res[pid]
       else:
         if len(tmp_res[pid][0].keys()) > len(result[pid][0].keys()):
           result[pid] = tmp_res[pid]
-  final_res = list(result)
   #sort result by len_score, subsort by pos_score, subsort by identical_worts_score
-  final_res = sorted(final_res, key=lambda elem: (elem[1],elem[2],elem[3]),reverse=True)
+  final_res = sorted(result, key=lambda elem: (result[elem][1], result[elem][2], result[elem][3]) ,reverse=True)
+  print final_res
   return final_res
 
 def get_intersection(indexes):
