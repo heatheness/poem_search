@@ -10,7 +10,6 @@ from index import get_index_data, get_poem
 from itertools import *
 from handle_request import amazing_fun
 from collections import OrderedDict
-import operator
 
 __author__ = 'mayns'
 
@@ -122,8 +121,15 @@ def get_pos_score(elem):
   return ctr
 
 def get_identical_words_score(elem):
-  #TODO implement
-  return 1 
+  positions =  elem.values()
+  all_combs = product(*positions)
+  global_min = None
+  for comb in all_combs:
+    local_min = max(comb) - min(comb)
+    if global_min < local_min or global_min == None:
+      global_min = local_min
+  return global_min
+      
 
 def check_phrase(phrase, normalized_req):
   res_dict = {}
