@@ -12,6 +12,7 @@ Module contains basic functions for handling text
 
 import pymorphy2
 import re
+from itertools import product
 
 __author__ = 'nyash myash'
 
@@ -105,6 +106,35 @@ def clear(s):
                     s[i] = s[i].replace(j, latin_base[j])
 
     return s
+
+
+def clear_req(s):
+    from handle_request import corrected_spell
+    base = u"qwertyuiop[]asdfghjkl;'\zxcvbnm,.§`QWERTYUIOPASDFGHJKL;'\ZXCVBNM,./ZXCVBNM{}|?~±"
+    s = clr.sub(u' ', s).strip()
+    s = s.split()
+    flat_variants = []
+    for i in xrange(len(s)):
+        word = s[i]
+        flag = 1
+        for j in word:
+            if j not in base:
+                flag = 0
+                break
+        if flag == 1:
+            word = keymap(s[i])
+        spells = [word]
+        spells.extend(corrected_spell(word))
+        flat_variants.append(spells)
+
+
+
+    variants = product(*flat_variants)
+
+    variants = list(variants)
+
+
+    return map(lambda req: clear(req), [u' '.join(list(v)) for v in variants])
 
 
 def get_normal(word):
@@ -259,6 +289,8 @@ def keymap(word):
 
 
 if __name__ == '__main__':
+    for i in clear_req(u' gfgf vj;tn rfhjdf'):
+        print u' '.join(i)
     # import timeit
     # start = timeit.default_timer()
     # w = clear(u'Кто-то где-то    и может - --это или-- что-то-  -Ёж- и- ёлочка  куда-то')
@@ -288,9 +320,9 @@ if __name__ == '__main__':
     # print translit(u'domashniiy')
     # print translit(u'pirog')
 
-    p = get_normal(u'ожет')
-    for item in p:
-        print item[0], item[1]
+    # p = get_normal(u'ожет')
+    # for item in p:
+    #     print item[0], item[1]
 
     # w = map(keymap, u'vj;tn b yt vj;tn dczrjt ,sdftn d njv nj dcz b rhfcjnf rhfcbdsq wfgkz b pfrfn e t;f yf gjkejcnhjdt \
     # c otkrjq [jnz cbnj gm`n vjkjrj ,eltn abyfkmysq xfq yf itgjn c]tcn rjrjc gm`n abfkrf hjpjdsq lj;lm'.split())
