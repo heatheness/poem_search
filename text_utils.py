@@ -17,6 +17,7 @@ from itertools import product
 __author__ = 'nyash myash'
 
 delete = re.compile(u'[^а-яА-Я\-ёЁ0-9a-zA-Z]+?', re.UNICODE)
+delete2 = re.compile(u"[^а-яА-Я\-ёЁ0-9a-zA-Z§±\[{}\]`~,<.>;']+?", re.UNICODE)
 clr = re.compile(r'\s+', re.UNICODE)
 morph = pymorphy2.MorphAnalyzer() # this is out of function for speed increasing
 
@@ -110,9 +111,14 @@ def clear(s):
 
 def clear_req(s):
     from handle_request import corrected_spell
-    base = u"qwertyuiop[]asdfghjkl;'\zxcvbnm,.§`QWERTYUIOPASDFGHJKL;'\ZXCVBNM,./ZXCVBNM{}|?~±"
+
+    base = u"qwertyuiop[]asdfghjkl;'\zxcvbnm,.§`;'\,./{}|?~±<>"
+    s = s.lower()
+    s = delete2.sub(' ', s)
     s = clr.sub(u' ', s).strip()
+    s = s.replace(u' - ', u' ')
     s = s.split()
+
     flat_variants = []
     for i in xrange(len(s)):
         word = s[i]
@@ -123,8 +129,10 @@ def clear_req(s):
                 break
         if flag == 1:
             word = keymap(s[i])
-        spells = [word]
+            word_translit = translit(s[i])
+        spells = [word,word_translit]
         spells.extend(corrected_spell(word))
+        spells.extend(corrected_spell(word_translit))
         flat_variants.append(spells)
 
 
@@ -132,7 +140,6 @@ def clear_req(s):
     variants = product(*flat_variants)
 
     variants = list(variants)
-
 
     return map(lambda req: clear(req), [u' '.join(list(v)) for v in variants])
 
@@ -219,7 +226,7 @@ def translit(word):
         u'sch': u'щ',
         u'"': u'ъ',
         u'y': u'ы',
-        u'\'': u'ь',
+        u"'": u'ь',
         u'yu': u'ю',
         u'ya': u'я'
     }
@@ -289,7 +296,7 @@ def keymap(word):
 
 
 if __name__ == '__main__':
-    for i in clear_req(u' gfgf vj;tn rfhjdf'):
+    for i in clear_req(u""):
         print u' '.join(i)
     # import timeit
     # start = timeit.default_timer()
