@@ -112,7 +112,7 @@ def get_len_score(elem, normalized_req):
   score = 0
   for elem in normalized_req:
     score += word_type_scores[elem[1]]
-  return score
+  return score/len(normalized_req)
     
 def get_pos_score(elem):
   ctr = 0
