@@ -15,23 +15,23 @@ import operator
 __author__ = 'mayns'
 
 word_type_scores = {
-   u'NOUN': 1,
-   u'ADJF': 1,
-   u'ADJS': 1,
-   u'COMP': 1,
-   u'VERB': 1,
-   u'INFN': 1,
-   u'PRTF': 1,
-   u'PRTS': 1,
-   u'GRND': 1,
-   u'NUMR': 0.8,
-   u'ADVB': 1,
-   u'NPRO': 0.8,
-   u'PRED': 1,
-   u'PRCL': 0.2,
-   u'CONJ': 0.2,
-   u'PREP': 0.2,
-   u'INTJ': 0.2,
+   u'существительное': 1,
+   u'прилагательное': 1,
+   u'прилагательное': 1,
+   u'наречие': 1,
+   u'глагол': 1,
+   u'глагол': 1,
+   u'причастие': 1,
+   u'причастие': 1,
+   u'деепричастие': 1,
+   u'числительное': 0.8,
+   u'наречие': 1,
+   u'местоимение': 0.8,
+   u'наречие': 1,
+   u'частица': 0.2,
+   u'союз': 0.2,
+   u'предлог': 0.2,
+   u'междометие': 0.2,
 }
 
 def process_request(req):
@@ -110,10 +110,8 @@ def get_req_variants(req):
 #     return
 
 def get_len_score(elem, normalized_req):
-  return 1
   score = 0
   for elem in normalized_req:
-    #TODO change dict
     score += word_type_scores[elem[1]]
   return score
     
@@ -181,7 +179,6 @@ def process_request(request):
           result[pid] = tmp_res[pid]
   #sort result by len_score, subsort by pos_score, subsort by identical_worts_score
   final_res = sorted(result, key=lambda elem: (result[elem][1], result[elem][2], result[elem][3]) ,reverse=True)
-  print final_res
   return final_res
 
 def get_intersection(indexes):
