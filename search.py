@@ -36,7 +36,7 @@ def process_req(req):
     :type req: str | unicode
     :return: list of tuples with index and poem like [(index, poem)...]
     """
-    results = []
+    i_result = []
     req_indexes = []
     clean_req = clear(req)
 
@@ -53,15 +53,16 @@ def process_req(req):
         if full_hit:
             sorted_results = cmp_by_frequency(full_hit, req_indexes)
             for i in sorted_results:
-                results.append((i, get_poem(i)))
-            if len(clean_req) > 2:
-                return results
+                i_result.append(i)
+            if len(clean_req) > 3:
+                return [(i, get_poem(i)) for i in i_result]
+
     #yobisearch here appended to oks search
     yobi_res = process_request(req)
     for elem in yobi_res:
-        if elem not in results:
-            results.append(elem)
-    return results
+        if elem not in i_result:
+            i_result.append(elem)
+    return [(i, get_poem(i)) for i in i_result]
 
     # no full intersection or no full hit or len <= 2
     # c_indexes = {}
@@ -198,7 +199,7 @@ def process_request(request):
             elif len(tmp_res[pid][0].keys()) > len(result[pid][0].keys()):
                 result[pid] = tmp_res[pid]
     #sort result by len_score, subsort by pos_score, subsort by identical_worts_score
-    final_res = sorted(result, key=lambda elem: (result[elem][1], result[elem][2], result[elem][3]) ,reverse=True)
+    final_res = sorted(result, key=lambda elem: (result[elem][1], result[elem][2], result[elem][3]), reverse=True)
     return final_res
 
 
@@ -212,4 +213,10 @@ def get_intersection(indexes):
 
 if __name__ == u'__main__':
     # process_request(u'стали ждать ответа')
-    cmp_by_frequency([129, 5, 141, 160, 162, 35, 37, 44, 51, 59, 62, 79, 91, 111, 122, 126], [[[3, 12], [5, 3], [16, 6], [16, 10], [16, 18], [23, 54], [26, 29], [27, 25], [35, 1], [35, 52], [37, 62], [41, 19], [44, 11], [44, 25], [44, 48], [51, 4], [51, 18], [56, 27], [59, 5], [59, 55], [60, 27], [62, 21], [68, 6], [70, 14], [79, 17], [79, 43], [81, 1], [83, 31], [86, 15], [89, 3], [91, 4], [111, 5], [122, 12], [126, 7], [129, 27], [133, 8], [138, 34], [140, 11], [141, 4], [152, 11], [155, 9], [160, 13], [162, 1], [170, 31], [173, 5], [174, 3], [180, 18]]])
+    cmp_by_frequency([129, 5, 141, 160, 162, 35, 37, 44, 51, 59, 62, 79, 91, 111, 122, 126],
+                     [[[3, 12], [5, 3], [16, 6], [16, 10], [16, 18], [23, 54], [26, 29], [27, 25], [35, 1],
+                       [35, 52], [37, 62], [41, 19], [44, 11], [44, 25], [44, 48], [51, 4], [51, 18], [56, 27],
+                       [59, 5], [59, 55], [60, 27], [62, 21], [68, 6], [70, 14], [79, 17], [79, 43], [81, 1],
+                       [83, 31], [86, 15], [89, 3], [91, 4], [111, 5], [122, 12], [126, 7], [129, 27],
+                       [133, 8], [138, 34], [140, 11], [141, 4], [152, 11], [155, 9], [160, 13], [162, 1],
+                       [170, 31], [173, 5], [174, 3], [180, 18]]])
