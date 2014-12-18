@@ -64,16 +64,6 @@ def process_req(req):
             i_result.append(elem)
     return [(i, get_poem(i)) for i in i_result]
 
-    # no full intersection or no full hit or len <= 2
-    # c_indexes = {}
-    # for x in xrange(2, len(flatten_variants), -1):
-    #     print x
-    #     combs = combinations(flatten_variants, x)
-    #     for c in combs:
-    #         c_indexes.setdefault(c, []).extend(get_index_data(c))
-    # print c_indexes
-        # new_intersection = get_intersection(combs)
-
 
 def cmp_by_frequency(intersection, indexes):
     results = {}
@@ -107,17 +97,6 @@ def get_req_variants(req):
 
     variants = product(*flatten_varinats)
     return list(variants)
-
-
-# def full_search(req, indexes):
-#     for index in indexes:
-#         poem = get_poem(index)
-#         poem_variants = get_req_variants(poem)
-#         poem_variants = [u' '.join(p) for p in poem_variants]
-#         for variant in poem_variants:
-#             if req in variant:
-#                 return req, variant
-#     return
 
 
 def get_len_score(normalized_req):
