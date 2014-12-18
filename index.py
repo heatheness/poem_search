@@ -115,7 +115,11 @@ def get_index_data(word):
     :rtype: list
     """
     global poems_index
-    return poems_index[word]
+    try:
+        index = poems_index[word]
+    except KeyError:
+        return []
+    return index
 
 poems = poems_to_list()
 poems_index = init_index()

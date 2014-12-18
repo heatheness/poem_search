@@ -25,13 +25,18 @@ def result_formatter(results):
     results = [u'\n- {} -\n{}\n'.format(res[0]+1, res[1]) for res in results]
     return u''.join(results)
 
+# print prompt
+# x = lambda: raw_input().decode(encoding='utf-8')
+
 while True:
     req = raw_input(prompt).decode(encoding='utf-8')
+    # sentinel = ''
+    # req = '\n'.join(iter(x, sentinel))
     if req == u'exit':
         print u'Bye!'
         break
-    try:
-        result = process_request(req)
-    except KeyError, ex:
-        result = None
+    # try:
+    result = process_request(req)
+    # except KeyError, ex:
+    #     result = None
     print result_formatter(result)
