@@ -19,8 +19,7 @@ __author__ = 'nyash myash'
 delete = re.compile(u'[^а-яА-Я\-ёЁ0-9a-zA-Z]+?', re.UNICODE)
 delete2 = re.compile(u"[^а-яА-Я\-ёЁ0-9a-zA-Z§±\[{}\]`~,<.>;']+?", re.UNICODE)
 clr = re.compile(r'\s+', re.UNICODE)
-morph = pymorphy2.MorphAnalyzer() # this is out of function for speed increasing
-
+morph = pymorphy2.MorphAnalyzer()   # this is out of function for speed increasing
 
 
 def yo_replace(s):
@@ -43,7 +42,7 @@ def clear(s):
     -- 'ё' is not replaced with 'e'
 
     :param s: unicode string
-    :type s: str
+    :type s: unicode
     :return: lowercased unicode string without punctuation and other non-letter symbols
     :rtype: list
     """
@@ -135,12 +134,8 @@ def clear_req(s):
         spells.extend(corrected_spell(word_translit))
         flat_variants.append(spells)
 
-
-
     variants = product(*flat_variants)
-
     variants = list(variants)
-
     return map(lambda req: clear(req), [u' '.join(list(v)) for v in variants])
 
 
@@ -262,80 +257,80 @@ def keymap(word):
         u'r': u'к',
         u't': u'е',
         u'y': u'н',
-        u'u' : u'г',
-        u'i' : u'ш',
-        u'o' : u'щ',
-        u'p' : u'з',
-        u'[' : u'х',
-        u']' : u'ъ',
-        u'a' : u'ф',
-        u's' : u'ы',
-        u'd' : u'в',
-        u'f' : u'а',
-        u'g' : u'п',
-        u'h' : u'р',
-        u'j' : u'о',
-        u'k' : u'л',
-        u'l' : u'д',
-        u';' : u'ж',
-        u"'" : u'э',
-        u'§' : u'ч',
-        u'z' : u'я',
-        u'x' : u'ч',
-        u'c' : u'с',
-        u'v' : u'м',
-        u'b' : u'и',
-        u'n' : u'т',
-        u'm' : u'ь',
-        u',' : u'б',
-        u'.' : u'ю',
-        u'`' : u'ё'
+        u'u': u'г',
+        u'i': u'ш',
+        u'o': u'щ',
+        u'p': u'з',
+        u'[': u'х',
+        u']': u'ъ',
+        u'a': u'ф',
+        u's': u'ы',
+        u'd': u'в',
+        u'f': u'а',
+        u'g': u'п',
+        u'h': u'р',
+        u'j': u'о',
+        u'k': u'л',
+        u'l': u'д',
+        u';': u'ж',
+        u"'": u'э',
+        u'§': u'ч',
+        u'z': u'я',
+        u'x': u'ч',
+        u'c': u'с',
+        u'v': u'м',
+        u'b': u'и',
+        u'n': u'т',
+        u'm': u'ь',
+        u',': u'б',
+        u'.': u'ю',
+        u'`': u'ё'
     }
 
     return u''.join([base[i] for i in word])
 
 
 if __name__ == '__main__':
-    for i in clear_req(u"mama myla ramu"):
+    for i in clear_req(u' gfgf vj;tn rfhjdf'):
         print u' '.join(i)
-    # import timeit
-    # start = timeit.default_timer()
-    # w = clear(u'Кто-то где-то    и может - --это или-- что-то-  -Ёж- и- ёлочка  куда-то')
-    # for item in w:
-    #     print item
-    # print
-    #
-    # w = clear(u'0дывлоа 185 0ыоало0ыдлао ыатдло0 8ывла8 длолдао33апт 0статься 03')
-    # for item in w:
-    #     print item
-    # print
-    #
-    # w = clear(u'60дATь')
-    # print w[0]
-    # print
+        # import timeit
+        # start = timeit.default_timer()
+        # w = clear(u'Кто-то где-то    и может - --это или-- что-то-  -Ёж- и- ёлочка  куда-то')
+        # for item in w:
+        #     print item
+        # print
+        #
+        # w = clear(u'0дывлоа 185 0ыоало0ыдлао ыатдло0 8ывла8 длолдао33апт 0статься 03')
+        # for item in w:
+        #     print item
+        # print
+        #
+        # w = clear(u'60дATь')
+        # print w[0]
+        # print
 
-    # p = get_normal(u'стали')
-    # f = get_normal(u'петь')
-    # g = get_normal(u'создавать')
-    # u = get_normal(u'творить')
-    # q = get_normal(u'исследовать')
-    # a = get_normal(u'пробовать')
-    # print timeit.default_timer() - start
-    # for item in p:
-    #     print item[0], item[1]
-    #
-    # print translit(u'domashniiy')
-    # print translit(u'pirog')
+        # p = get_normal(u'стали')
+        # f = get_normal(u'петь')
+        # g = get_normal(u'создавать')
+        # u = get_normal(u'творить')
+        # q = get_normal(u'исследовать')
+        # a = get_normal(u'пробовать')
+        # print timeit.default_timer() - start
+        # for item in p:
+        #     print item[0], item[1]
+        #
+        # print translit(u'domashniiy')
+        # print translit(u'pirog')
 
-    # p = get_normal(u'ожет')
-    # for item in p:
-    #     print item[0], item[1]
+        # p = get_normal(u'ожет')
+        # for item in p:
+        #     print item[0], item[1]
 
-    # w = map(keymap, u'vj;tn b yt vj;tn dczrjt ,sdftn d njv nj dcz b rhfcjnf rhfcbdsq wfgkz b pfrfn e t;f yf gjkejcnhjdt \
-    # c otkrjq [jnz cbnj gm`n vjkjrj ,eltn abyfkmysq xfq yf itgjn c]tcn rjrjc gm`n abfkrf hjpjdsq lj;lm'.split())
-    # for item in w:
-    #     print item
+        # w = map(keymap, u'vj;tn b yt vj;tn dczrjt ,sdftn d njv nj dcz b rhfcjnf rhfcbdsq wfgkz b pfrfn e t;f yf gjkejcnhjdt \
+        # c otkrjq [jnz cbnj gm`n vjkjrj ,eltn abyfkmysq xfq yf itgjn c]tcn rjrjc gm`n abfkrf hjpjdsq lj;lm'.split())
+        # for item in w:
+        #     print item
 
-    # for item in w:
-    # item = get_normal(item)
-    #     print item[0][0], item[0][1]
+        # for item in w:
+        # item = get_normal(item)
+        #     print item[0][0], item[0][1]

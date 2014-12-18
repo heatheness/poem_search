@@ -9,31 +9,26 @@ from text_utils import clear, get_normal
 from index import get_index_data, get_poem
 from itertools import *
 from handle_request import amazing_fun
-from collections import OrderedDict
 
 __author__ = 'mayns'
 
 word_type_scores = {
-   u'существительное': 1,
-   u'прилагательное': 1,
-   u'прилагательное': 1,
-   u'наречие': 1,
-   u'глагол': 1,
-   u'глагол': 1,
-   u'причастие': 1,
-   u'причастие': 1,
-   u'деепричастие': 1,
-   u'числительное': 0.8,
-   u'наречие': 1,
-   u'местоимение': 0.8,
-   u'наречие': 1,
-   u'частица': 0.2,
-   u'союз': 0.2,
-   u'предлог': 0.2,
-   u'междометие': 0.2,
+    u'существительное': 1,
+    u'прилагательное': 1,
+    u'наречие': 1,
+    u'глагол': 1,
+    u'причастие': 1,
+    u'деепричастие': 1,
+    u'числительное': 0.8,
+    u'местоимение': 0.8,
+    u'частица': 0.2,
+    u'союз': 0.2,
+    u'предлог': 0.2,
+    u'междометие': 0.2,
 }
 
-def process_request(req):
+
+def process_req(req):
     """
     1. Intersection of all occurrences
         - YES -> full search (clean req in clean poem), sort by frequency, add to results and return them
@@ -44,6 +39,7 @@ def process_request(req):
     results = []
     req_indexes = []
     clean_req = clear(req)
+
     normal_req = [get_normal(w)[0] for w in clean_req]
     flatten_variants = [x[0] for x in normal_req]
     
@@ -51,18 +47,32 @@ def process_request(req):
         req_indexes.append(get_index_data(word))
 
     full_intersection = get_intersection(req_indexes)
+
     if full_intersection:
         full_hit = full_search(req, list(set(full_intersection)))
         if full_hit:
             sorted_results = cmp_by_frequency(full_hit, req_indexes)
             for i in sorted_results:
                 results.append((i, get_poem(i)))
+            if len(clean_req) > 2:
+                return results
     #yobisearch here appended to oks search
     yobi_res = process_request(req)
     for elem in yobi_res:
-      if elem not in results:
-        results.append(elem)
+        if elem not in results:
+            results.append(elem)
     return results
+
+    # no full intersection or no full hit or len <= 2
+    # c_indexes = {}
+    # for x in xrange(2, len(flatten_variants), -1):
+    #     print x
+    #     combs = combinations(flatten_variants, x)
+    #     for c in combs:
+    #         c_indexes.setdefault(c, []).extend(get_index_data(c))
+    # print c_indexes
+        # new_intersection = get_intersection(combs)
+
 
 def cmp_by_frequency(intersection, indexes):
     results = {}
@@ -108,84 +118,89 @@ def get_req_variants(req):
 #                 return req, variant
 #     return
 
-def get_len_score(elem, normalized_req):
-  score = 0
-  for elem in normalized_req:
-    score += word_type_scores[elem[1]]
-  return score/len(normalized_req)
-    
+
+def get_len_score(normalized_req):
+    score = 0
+    for elem in normalized_req:
+        score += word_type_scores[elem[1]]
+    return score/len(normalized_req)
+
+
 def get_pos_score(elem):
-  ctr = 0
-  for word_id in elem:
-    ctr+=len(elem[word_id])
-  return ctr
+    ctr = 0
+    for word_id in elem:
+        ctr += len(elem[word_id])
+    return ctr
+
 
 def get_identical_words_score(elem):
-  positions =  elem.values()
-  all_combs = product(*positions)
-  global_min = None
-  for comb in all_combs:
-    local_min = max(comb) - min(comb)
-    if global_min < local_min or global_min == None:
-      global_min = local_min
-  return global_min
+    positions = elem.values()
+    all_combs = product(*positions)
+    global_min = None
+    for comb in all_combs:
+        local_min = max(comb) - min(comb)
+        if global_min < local_min or global_min == None:
+            global_min = local_min
+    return global_min
       
 
 def check_phrase(phrase, normalized_req):
-  res_dict = {}
-  
-  for word in phrase:
-    #w_t is (pid:pos)
-    w_t = get_index_data(word)
-    for elem in w_t:
-      pid = elem[0]
-      if pid not in res_dict.keys():
-        res_dict[pid] = {word:[elem[1]]}
-      elif word in res_dict[pid].values():
-        val = res_dict[pid][word]
-        val.append(w_t[1])
-        res_dict[pid] = {word:val}
-  if not res_dict:
-    return None
+    res_dict = {}
 
-  maxlen = max([len(res_dict[el].keys()) for el in res_dict])
-  cands = [pid for pid in res_dict if len(res_dict[pid].keys()) == maxlen]
+    for word in phrase:
+        #w_t is (pid:pos)
+        w_t = get_index_data(word)
+        for elem in w_t:
+            pid = elem[0]
+            if pid not in res_dict.keys():
+                res_dict[pid] = {word:[elem[1]]}
+            elif word in res_dict[pid].values():
+                val = res_dict[pid][word]
+                val.append(w_t[1])
+                res_dict[pid] = {word:val}
+    if not res_dict:
+        return None
+
+    maxlen = max([len(res_dict[el].keys()) for el in res_dict])
+    cands = [pid for pid in res_dict if len(res_dict[pid].keys()) == maxlen]
  
-  #elem is ({word:[positions]},len_score,pos_score, identical_words_score)
-  result = {}
-  for elem in cands:
-    to_check = res_dict[elem]
-    len_score = get_len_score(to_check, normalized_req)
-    pos_score = get_pos_score(to_check)
-    identical_words_score = get_identical_words_score(to_check)
-    result[elem] = (res_dict[elem],len_score,pos_score,identical_words_score) 
+    #elem is ({word:[positions]},len_score,pos_score, identical_words_score)
+    result = {}
+    for elem in cands:
+        to_check = res_dict[elem]
+        len_score = get_len_score(normalized_req)
+        pos_score = get_pos_score(to_check)
+        identical_words_score = get_identical_words_score(to_check)
+        result[elem] = (res_dict[elem],len_score,pos_score,identical_words_score)
   
-  return result   
+    return result
+
 
 def normalize_req(req):
-  clean_req = clear(req)
-  normal_req = [get_normal(w)[0] for w in clean_req]
-  return normal_req
-  
-def process_request(request):
-  search_phrases = amazing_fun(request)
+    clean_req = clear(req)
+    normal_req = [get_normal(w)[0] for w in clean_req]
+    return normal_req
 
-  result = {}
-  #only the most len_scored elem with identical pid remains
-  for phrase in search_phrases:
-    normalized_req = normalize_req(phrase)
-    tmp_res = check_phrase(phrase.split(), normalized_req)
-    if not tmp_res:
-      continue
-    for pid in tmp_res:
-      if pid not in result:
-        result[pid] = tmp_res[pid]
-      else:
-        if len(tmp_res[pid][0].keys()) > len(result[pid][0].keys()):
-          result[pid] = tmp_res[pid]
-  #sort result by len_score, subsort by pos_score, subsort by identical_worts_score
-  final_res = sorted(result, key=lambda elem: (result[elem][1], result[elem][2], result[elem][3]) ,reverse=True)
-  return final_res
+
+def process_request(request):
+    search_phrases = amazing_fun(request)
+
+    result = {}
+    #only the most len_scored elem with identical pid remains
+    for phrase in search_phrases:
+        normalized_req = normalize_req(phrase)
+        tmp_res = check_phrase(phrase.split(), normalized_req)
+        if not tmp_res:
+            continue
+        for pid in tmp_res:
+            if pid not in result:
+                result[pid] = tmp_res[pid]
+            elif len(tmp_res[pid][0].keys()) > len(result[pid][0].keys()):
+                result[pid] = tmp_res[pid]
+    #sort result by len_score, subsort by pos_score, subsort by identical_worts_score
+    final_res = sorted(result, key=lambda elem: (result[elem][1], result[elem][2], result[elem][3]) ,reverse=True)
+    return final_res
+
 
 def get_intersection(indexes):
     sets = []

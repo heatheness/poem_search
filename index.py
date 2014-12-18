@@ -100,7 +100,7 @@ def get_poem(i):
     :param i: poem number
     :type i: int
     :return poem
-    :rtype: str
+    :rtype: unicode
     """
 
     global poems
@@ -115,11 +115,8 @@ def get_index_data(word):
     :rtype: list
     """
     global poems_index
-    try:
-        index = poems_index[word]
-    except KeyError:
-        return []
-    return index
+    return poems_index.get(word, [])
+
 
 poems = poems_to_list()
 poems_index = init_index()

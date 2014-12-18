@@ -5,7 +5,7 @@ input, representation of this input and form list of search results
 
 """
 
-from search import process_request
+from search import process_req
 
 __author__ = 'mayns'
 
@@ -29,14 +29,11 @@ def result_formatter(results):
 # x = lambda: raw_input().decode(encoding='utf-8')
 
 while True:
-    req = raw_input(prompt).decode('utf-8','ignore')
+    req = raw_input(prompt).decode('utf-8', 'ignore')
     # sentinel = ''
     # req = '\n'.join(iter(x, sentinel))
     if req == u'exit':
         print u'Bye!'
         break
-    # try:
-    result = process_request(req)
-    # except KeyError, ex:
-    #     result = None
+    result = process_req(req)
     print result_formatter(result)

@@ -34,6 +34,7 @@ def get_syns(words, lang=u'ru-ru'):
         syns = json.loads(resp).get(u'def')
         if not syns:
             continue
+
         syns = syns[0].get(u'tr')
         if not syns:
             continue
@@ -45,6 +46,7 @@ def get_syns(words, lang=u'ru-ru'):
             if syn.get(u'syn'):
                 map(lambda x: word_syns.add(x['text']), syn['syn'])
         syns_variants.extend(list(word_syns))
+
     return syns_variants
 
 
@@ -74,7 +76,7 @@ def amazing_fun(boring_string, lang=u'ru-ru'):
     """
 
     :param boring_string:
-    :type boring_string: str
+    :type boring_string: unicode
     :return:
     :rtype: list
     """
@@ -97,8 +99,11 @@ def amazing_fun(boring_string, lang=u'ru-ru'):
 
     full_variants = product(*columns)
     amazing_variants = [' '.join(list(full_var)) for full_var in list(full_variants)]
+    # for var in amazing_variants:
+    #     print var
     return amazing_variants
 
 if __name__ == u'__main__':
-    for c in corrected_spell(u'ингридиенты'):
-        print c
+    amazing_fun(u'во саду ли в огороде')
+    # for c in corrected_spell(u'ингридиенты'):
+    #     print c
