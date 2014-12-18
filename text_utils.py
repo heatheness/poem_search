@@ -296,7 +296,7 @@ def keymap(word):
 
 
 if __name__ == '__main__':
-    for i in clear_req(u""):
+    for i in clear_req(u"mama myla ramu"):
         print u' '.join(i)
     # import timeit
     # start = timeit.default_timer()
