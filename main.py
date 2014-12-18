@@ -29,7 +29,7 @@ def result_formatter(results):
 # x = lambda: raw_input().decode(encoding='utf-8')
 
 while True:
-    req = raw_input(prompt).decode(encoding='utf-8')
+    req = raw_input(prompt).decode('utf-8','ignore')
     # sentinel = ''
     # req = '\n'.join(iter(x, sentinel))
     if req == u'exit':
