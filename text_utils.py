@@ -128,15 +128,22 @@ def clear_req(s):
                 break
         if flag == 1:
             word = keymap(s[i])
-            word_translit = translit(s[i])
-        spells = [word,word_translit]
+            try:
+                word_translit = translit(s[i])
+            except KeyError:
+                 flag = 0
+        spells = [word]
         spells.extend(corrected_spell(word))
-        spells.extend(corrected_spell(word_translit))
+        if flag == 1:
+            spells.extend(corrected_spell(word_translit))
         flat_variants.append(spells)
 
     variants = product(*flat_variants)
     variants = list(variants)
-    return map(lambda req: clear(req), [u' '.join(list(v)) for v in variants])
+    variants = map(lambda req: clear(req), [u' '.join(list(v)) for v in variants])
+    variants = [u' '.join(list(v)) for v in variants]
+    return list(set(variants))
+
 
 
 def get_normal(word):
@@ -291,8 +298,16 @@ def keymap(word):
 
 
 if __name__ == '__main__':
-    for i in clear_req(u' gfgf vj;tn rfhjdf'):
-        print u' '.join(i)
+    for i in clear_req(u'mама мыла раму'):
+        print i
+    for i in clear_req(u'gfgf vj;tn'):
+        print i
+    for i in clear_req(u'j;tn b r лучшему'):
+        print i
+    for i in clear_req(u'Hет и точн0'):
+        print i
+    for i in clear_req(u'60дать'):
+        print i
         # import timeit
         # start = timeit.default_timer()
         # w = clear(u'Кто-то где-то    и может - --это или-- что-то-  -Ёж- и- ёлочка  куда-то')
