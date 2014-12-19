@@ -71,7 +71,7 @@ def corrected_spell(word):
     return corrected
 
 
-def amazing_fun(boring_string, lang=u'ru-ru'):
+def amazing_fun(boring_string, lang=u'ru-ru', num=0):
 
     """
 
@@ -96,7 +96,8 @@ def amazing_fun(boring_string, lang=u'ru-ru'):
         columns.append(flat_original[i])
         if variants[i]:
             columns[i].extend(variants[i])
-
+    if num:
+        columns = [c[:num] for c in columns]
     full_variants = product(*columns)
     amazing_variants = [' '.join(list(full_var)) for full_var in list(full_variants)]
     # for var in amazing_variants:
