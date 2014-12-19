@@ -97,7 +97,7 @@ def amazing_fun(boring_string, lang=u'ru-ru', num=0):
         if variants[i]:
             columns[i].extend(variants[i])
     if num:
-        columns = [c[:num] for c in columns]
+        columns = [c[:num] for c in columns if len(c) > num]
     full_variants = product(*columns)
     amazing_variants = [' '.join(list(full_var)) for full_var in list(full_variants)]
     # for var in amazing_variants:
