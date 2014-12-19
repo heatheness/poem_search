@@ -20,7 +20,7 @@ def result_formatter(results):
     :rtype: str
     """
     if not results:
-        return u'No results for your request'
+        return u'No results for your request', u'Ups=)'
 
     str_results = [u'\n- {} -\n{}\n'.format(res[0]+1, res[1]) for res in results]
     stats = u'----\nTotal: {}\nIndexes: {}\n----'.format(len(results), ', '.join([str(r[0]+1) for r in results]))

@@ -131,15 +131,15 @@ def clear_req(s):
                 break
         if flag:
             word = keymap(s[i])
-            try:
-                word_translit = translit(s[i])
-            except KeyError:
-                flag = 0
+            # try:
+            #     word_translit = translit(s[i])
+            # except KeyError:
+            #     flag = 0
         spells = [word]
         spells.extend(corrected_spell(word))
-        if flag:
-            spells.append(word_translit)
-            spells.extend(corrected_spell(word_translit))
+        # if flag:
+        #     spells.append(word_translit)
+        #     spells.extend(corrected_spell(word_translit))
 
         flat_variants.append(spells)
 

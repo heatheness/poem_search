@@ -53,6 +53,8 @@ def process_req(req):
             sorted_results = cmp_by_frequency(full_hit, req_indexes)
             for i in sorted_results:
                 i_result.append(i)
+            if len(normal_req) > 3:
+                return [(i, get_poem(i)) for i in i_result]
 
     #yobisearch here appended to oks search
     yobi_res = process_request(req)
@@ -164,6 +166,7 @@ def process_request(request):
     search_phrases = []
     for r in corrected_req:
         search_phrases.extend(amazing_fun(r))
+    # search_phrases = amazing_fun(request)
 
     result = {}
     #only the most len_scored elem with identical pid remains
