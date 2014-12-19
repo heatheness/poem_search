@@ -5,7 +5,7 @@ All search logic is here.
 
 """
 
-from text_utils import clear, get_normal
+from text_utils import clear, get_normal, clear_req
 from index import get_index_data, get_poem
 from itertools import *
 from handle_request import amazing_fun
@@ -38,15 +38,14 @@ def process_req(req):
     """
     i_result = []
     req_indexes = []
-    clean_req = clear(req)
-
-    normal_req = [get_normal(w)[0] for w in clean_req]
+    full_intersection = []
+    normal_req = normalize_req(req)
     flatten_variants = [x[0] for x in normal_req]
     
     for word in flatten_variants:
         req_indexes.append(get_index_data(word))
-
-    full_intersection = get_intersection(req_indexes)
+    if req_indexes:
+        full_intersection = get_intersection(req_indexes)
 
     if full_intersection:
         full_hit = full_search(req, list(set(full_intersection)))
@@ -54,8 +53,6 @@ def process_req(req):
             sorted_results = cmp_by_frequency(full_hit, req_indexes)
             for i in sorted_results:
                 i_result.append(i)
-            if len(clean_req) > 3:
-                return [(i, get_poem(i)) for i in i_result]
 
     #yobisearch here appended to oks search
     yobi_res = process_request(req)
@@ -158,12 +155,15 @@ def check_phrase(phrase, normalized_req):
 
 def normalize_req(req):
     clean_req = clear(req)
-    normal_req = [get_normal(w)[0] for w in clean_req]
+    normal_req = [get_normal(w)[0] for w in clean_req if get_normal(w)]
     return normal_req
 
 
 def process_request(request):
-    search_phrases = amazing_fun(request)
+    corrected_req = clear_req(request)
+    search_phrases = []
+    for r in corrected_req:
+        search_phrases.extend(amazing_fun(r))
 
     result = {}
     #only the most len_scored elem with identical pid remains

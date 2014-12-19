@@ -105,6 +105,9 @@ def clear(s):
                 if j in latin_base.keys():
                     s[i] = s[i].replace(j, latin_base[j])
 
+    for i in xrange(len(s)):
+        s[i] = yo_replace(s[i])
+
     return s
 
 
@@ -126,16 +129,18 @@ def clear_req(s):
             if j not in base:
                 flag = 0
                 break
-        if flag == 1:
+        if flag:
             word = keymap(s[i])
             try:
                 word_translit = translit(s[i])
             except KeyError:
-                 flag = 0
+                flag = 0
         spells = [word]
         spells.extend(corrected_spell(word))
-        if flag == 1:
+        if flag:
+            spells.append(word_translit)
             spells.extend(corrected_spell(word_translit))
+
         flat_variants.append(spells)
 
     variants = product(*flat_variants)
@@ -298,15 +303,15 @@ def keymap(word):
 
 
 if __name__ == '__main__':
-    for i in clear_req(u'mама мыла раму'):
-        print i
-    for i in clear_req(u'gfgf vj;tn'):
-        print i
-    for i in clear_req(u'j;tn b r лучшему'):
-        print i
-    for i in clear_req(u'Hет и точн0'):
-        print i
-    for i in clear_req(u'60дать'):
+    # for i in clear_req(u'mама мыла раму'):
+    #     print i
+    # for i in clear_req(u'gfgf vj;tn'):
+    #     print i
+    # for i in clear_req(u'j;tn b r лучшему'):
+    #     print i
+    # for i in clear_req(u'Hет и точн0'):
+    #     print i
+    for i in clear_req(u'gkfnmtd yt yjie'):
         print i
         # import timeit
         # start = timeit.default_timer()
