@@ -159,7 +159,7 @@ def check_phrase(phrase, normalized_req, is_orig):
         return {}
 
     maxlen = max([len(res_dict[el].keys()) for el in res_dict])
-    cands = [pid for pid in res_dict if len(res_dict[pid].keys()) == maxlen or is_orig]
+    cands = [pid for pid in res_dict if len(res_dict[pid].keys()) == maxlen or (is_orig and get_len_score(normalized_req, res_dict[pid] > 0.7/len(res_dict[pid].keys())))]
  
     #elem is ({word:[positions]},len_score,pos_score, identical_words_score)
     result = {}
