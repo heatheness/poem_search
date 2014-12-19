@@ -181,9 +181,10 @@ def normalize_req(req):
 
 def process_request(request):
     corrected_req = clear_req(request)
-    search_phrases = []
-    for r in corrected_req:
-        search_phrases.extend(amazing_fun(r))
+    search_phrases = corrected_req
+    # search_phrases = [
+    # for r in corrected_req:
+    #     search_phrases.extend(amazing_fun(r))
     # WITHOUT clear_req() ------------------
     # search_phrases = amazing_fun(request)
     # --------------------------------------
