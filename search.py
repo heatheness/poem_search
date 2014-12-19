@@ -20,7 +20,7 @@ word_type_scores = {
     u'причастие': 1,
     u'деепричастие': 1,
     u'числительное': 0.8,
-    u'местоимение': 0.8,
+    u'местоимение': 0.6,
     u'частица': 0.2,
     u'союз': 0.2,
     u'предлог': 0.2,
@@ -136,7 +136,7 @@ def get_identical_words_score(elem):
     return global_min
       
 
-def check_phrase(phrase, normalized_req):
+def check_phrase(phrase, normalized_req, is_orig):
     res_dict = {}
 
     for word in phrase:
@@ -159,7 +159,7 @@ def check_phrase(phrase, normalized_req):
         return {}
 
     maxlen = max([len(res_dict[el].keys()) for el in res_dict])
-    cands = [pid for pid in res_dict if len(res_dict[pid].keys()) == maxlen]
+    cands = [pid for pid in res_dict if len(res_dict[pid].keys()) == maxlen or is_orig]
  
     #elem is ({word:[positions]},len_score,pos_score, identical_words_score)
     result = {}
@@ -197,7 +197,7 @@ def process_request(request):
     for i in range(len(search_phrases)):
         phrase = search_phrases[i]
         normalized_req = normalize_req(phrase)
-        tmp_res = check_phrase(phrase.split(), normalized_req)
+        tmp_res = check_phrase(phrase.split(), normalized_req, i == 0)
         if not tmp_res:
             continue
         for pid in tmp_res:
