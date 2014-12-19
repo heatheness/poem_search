@@ -187,6 +187,7 @@ def process_request(request):
     for r in corrected_req:
         if r:
             synonyms.extend((amazing_fun(r)[1:]))
+    synonyms = synonyms[:3]
     # # --------------------------------------
     #search_phrases = []
     #for r in corrected_req:
