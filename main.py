@@ -54,7 +54,7 @@ while True:
                     print u'RESULTS: {}/{}'.format(i, len(formatted_res[0]))
                     print formatted_res[1]
                 else:
-                    print 'breaking'
+                    # print 'breaking'
                     print u''.join(formatted_res[0][i:])
                     break
     else:

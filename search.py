@@ -201,8 +201,6 @@ def process_request(request):
     search_phrases = corrected_req + synonyms
     result = {}
     orig_res = []
-    for elem in corrected_req:
-        print elem
     #only the most len_scored elem with identical pid remains
     for i in range(len(search_phrases)):
         phrase = search_phrases[i]
@@ -213,7 +211,7 @@ def process_request(request):
         for pid in tmp_res:
             if (pid not in result) or (len(tmp_res[pid][0].keys()) > len(result[pid][0].keys())):
                 result[pid] = tmp_res[pid]
-                if i == 0 and pid not in orig_res:
+                if (i < num_corrected) and (pid not in orig_res):
                   orig_res.append(pid)
     #sort result by len_score, subsort by pos_score, subsort by identical_worts_score
     final_res = sorted(result, key=lambda elem: (result[elem][1], result[elem][2], result[elem][3]), reverse=True)
