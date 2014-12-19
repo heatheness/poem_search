@@ -181,23 +181,33 @@ def normalize_req(req):
 
 def process_request(request):
     corrected_req = clear_req(request)
-    search_phrases = corrected_req
+    # search_phrases = corrected_req
+    # SEPARATED #WITHOUT clear_req() ----------
+    synonyms = []
+    for r in corrected_req:
+        if r:
+            synonyms.extend((amazing_fun(r)[1:]))
+    # # --------------------------------------
     #search_phrases = []
     #for r in corrected_req:
     #  search_phrases.extend(amazing_fun(r))
-    #WITHOUT clear_req() ------------------
+    #WITHOUT clear_req() ---------------------
     #search_phrases = amazing_fun(request)
-    # --------------------------------------
-    # WITHOUT SYNONYMS ----------------------
+    # ----------------------------------------
+    # WITHOUT SYNONYMS -----------------------
     # search_phrases = clear_req(request)
-    # --------------------------------------
+    # ----------------------------------------
+    num_corrected = len(corrected_req)
+    search_phrases = corrected_req + synonyms
     result = {}
     orig_res = []
+    for elem in corrected_req:
+        print elem
     #only the most len_scored elem with identical pid remains
     for i in range(len(search_phrases)):
         phrase = search_phrases[i]
         normalized_req = normalize_req(phrase)
-        tmp_res = check_phrase(phrase.split(), normalized_req, i == 0)
+        tmp_res = check_phrase(phrase.split(), normalized_req, i < num_corrected)
         if not tmp_res:
             continue
         for pid in tmp_res:
