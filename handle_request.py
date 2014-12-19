@@ -104,6 +104,6 @@ def amazing_fun(boring_string, lang=u'ru-ru'):
     return amazing_variants
 
 if __name__ == u'__main__':
-    amazing_fun(u'па')
+    amazing_fun(u'стали ждать ответа')
     # for c in corrected_spell(u'ингридиенты'):
     #     print c

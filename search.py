@@ -65,6 +65,13 @@ def process_req(req):
 
 
 def cmp_by_frequency(intersection, indexes):
+    """
+
+    :param intersection: list of poems with intersection
+    :param indexes: list of [poem, index]
+    :return: list sorted by frequency of indexes in poem
+    :rtype: list
+    """
     results = {}
     for i in intersection:
         results.setdefault(i, 0)
@@ -75,6 +82,12 @@ def cmp_by_frequency(intersection, indexes):
 
 
 def full_search(req, indexes):
+    """
+
+    :param req: unicode
+    :param indexes: list
+    :rtype: list
+    """
     clean_req = u' '.join(clear(req))
     result_indexes = []
     for index in indexes:
@@ -138,7 +151,7 @@ def check_phrase(phrase, normalized_req):
                 val.append(w_t[1])
                 res_dict[pid] = {word:val}
     if not res_dict:
-        return None
+        return {}
 
     maxlen = max([len(res_dict[el].keys()) for el in res_dict])
     cands = [pid for pid in res_dict if len(res_dict[pid].keys()) == maxlen]
@@ -166,8 +179,12 @@ def process_request(request):
     search_phrases = []
     for r in corrected_req:
         search_phrases.extend(amazing_fun(r))
+    # WITHOUT clear_req() ------------------
     # search_phrases = amazing_fun(request)
-
+    # --------------------------------------
+    # WITHOT SYNONYMS ----------------------
+    # search_phrases = clear_req(request)
+    # --------------------------------------
     result = {}
     #only the most len_scored elem with identical pid remains
     for phrase in search_phrases:
