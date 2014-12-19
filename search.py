@@ -148,12 +148,13 @@ def check_phrase(phrase, normalized_req):
                 res_dict[pid] = {word:[elem[1]]}
             else:
                 if word in res_dict[pid].values():
-                  val = res_dict[pid][word]
-                  val.append(w_t[1])
-                  res_dict[pid] = {word:val}
+                    val = res_dict[pid][word]
+                    val.append(w_t[1])
+                    res_dict[pid] = {word:val}
                 else:
-                  val = res_dict[pid]
-                  val[word] = w_t[1]
+                    val = res_dict[pid]
+                    if len(w_t) > 1:
+                        val[word] = w_t[1]
     if not res_dict:
         return {}
 
