@@ -111,8 +111,8 @@ def get_req_variants(req):
     return list(variants)
 
 
-def get_len_score(normalized_req):
-    score = 0
+def get_len_score(normalized_req, to_check):
+    score = 0.0
     for elem in normalized_req:
         score += word_type_scores[elem[1]]
     return score/len(normalized_req)
@@ -146,10 +146,14 @@ def check_phrase(phrase, normalized_req):
             pid = elem[0]
             if pid not in res_dict.keys():
                 res_dict[pid] = {word:[elem[1]]}
-            elif word in res_dict[pid].values():
-                val = res_dict[pid][word]
-                val.append(w_t[1])
-                res_dict[pid] = {word:val}
+            else:
+                if word in res_dict[pid].values():
+                  val = res_dict[pid][word]
+                  val.append(w_t[1])
+                  res_dict[pid] = {word:val}
+                else:
+                  val = res_dict[pid]
+                  val[word] = w_t[1]
     if not res_dict:
         return {}
 
@@ -160,7 +164,7 @@ def check_phrase(phrase, normalized_req):
     result = {}
     for elem in cands:
         to_check = res_dict[elem]
-        len_score = get_len_score(normalized_req)
+        len_score = get_len_score(normalized_req, to_check)
         pos_score = get_pos_score(to_check)
         identical_words_score = get_identical_words_score(to_check)
         result[elem] = (res_dict[elem],len_score,pos_score,identical_words_score)
@@ -182,24 +186,32 @@ def process_request(request):
     # WITHOUT clear_req() ------------------
     # search_phrases = amazing_fun(request)
     # --------------------------------------
-    # WITHOT SYNONYMS ----------------------
+    # WITHOUT SYNONYMS ----------------------
     # search_phrases = clear_req(request)
     # --------------------------------------
     result = {}
+    orig_res = []
     #only the most len_scored elem with identical pid remains
-    for phrase in search_phrases:
+    for i in range(len(search_phrases)):
+        phrase = search_phrases[i]
         normalized_req = normalize_req(phrase)
         tmp_res = check_phrase(phrase.split(), normalized_req)
         if not tmp_res:
             continue
         for pid in tmp_res:
-            if pid not in result:
+            if (pid not in result) or (len(tmp_res[pid][0].keys()) > len(result[pid][0].keys())):
                 result[pid] = tmp_res[pid]
-            elif len(tmp_res[pid][0].keys()) > len(result[pid][0].keys()):
-                result[pid] = tmp_res[pid]
+                if i == 0 and pid not in orig_res:
+                  orig_res.append(pid)
     #sort result by len_score, subsort by pos_score, subsort by identical_worts_score
     final_res = sorted(result, key=lambda elem: (result[elem][1], result[elem][2], result[elem][3]), reverse=True)
-    return final_res
+    tmp_res = []
+    for elem in final_res: 
+        if elem in orig_res:
+            tmp_res.append(elem)
+            final_res.remove(elem)
+    tmp_res.extend(final_res)
+    return tmp_res
 
 
 def get_intersection(indexes):
